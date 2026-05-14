@@ -38,25 +38,22 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'flex h-screen shrink-0 flex-col border-r border-slate-200 bg-white transition-[width] duration-200',
-        'dark:border-slate-700 dark:bg-slate-800',
-        collapsed ? 'w-16' : 'w-60',
+        'glass flex h-screen shrink-0 flex-col transition-[width] duration-200',
+        collapsed ? 'w-16' : 'w-64',
       )}
     >
       <div
         className={cn(
-          'flex h-16 items-center border-b border-slate-200 px-4 dark:border-slate-700',
-          collapsed ? 'justify-center' : 'justify-between',
+          'border-subtle flex h-16 items-center border-b',
+          collapsed ? 'justify-center px-0' : 'justify-between px-4',
         )}
       >
-        <div className="flex items-center gap-2 overflow-hidden">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-600 font-semibold text-white">
+        <div className={cn('flex items-center gap-2.5', !collapsed && 'overflow-hidden')}>
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-600 font-semibold text-white shadow-sm">
             T
           </div>
           {!collapsed && (
-            <span className="truncate font-semibold text-slate-900 dark:text-slate-100">
-              TaskFlow
-            </span>
+            <span className="truncate text-base font-semibold text-primary">TaskFlow</span>
           )}
         </div>
 
@@ -75,7 +72,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </div>
       )}
 
-      <nav className="flex-1 space-y-1 px-2 py-4">
+      <nav className="flex-1 space-y-1 px-3 py-5">
         {NAV_ITEMS.map((item) => {
           const label = t(item.i18nKey)
           return (
@@ -85,10 +82,10 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               end={item.to === ROUTES.dashboard}
               className={({ isActive }) =>
                 cn(
-                  'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                  'group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150',
                   isActive
-                    ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300'
-                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100',
+                    ? 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-300'
+                    : 'text-muted hover:bg-[var(--surface-muted)] hover:text-primary',
                   collapsed && 'justify-center px-0',
                 )
               }

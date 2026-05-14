@@ -1,6 +1,7 @@
 export * from './Avatar'
 export * from './Badge'
 export * from './Button'
+export * from './Combobox'
 export * from './Dialog'
 export * from './Dropdown'
 export * from './IconButton'

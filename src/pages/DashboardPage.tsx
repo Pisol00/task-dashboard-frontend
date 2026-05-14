@@ -87,18 +87,20 @@ export function DashboardPage() {
   const isSubmitting = createMutation.isPending || updateMutation.isPending
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-          {t('dashboard.title')}
-        </h2>
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight text-primary">
+            {t('dashboard.title')}
+          </h2>
+        </div>
         <Button onClick={handleCreateClick}>
           <Plus className="h-4 w-4" />
           {t('dashboard.newTask')}
         </Button>
       </div>
 
-      <div className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+      <div className="surface-base border-subtle rounded-2xl border p-4 shadow-xs">
         <TaskFilters
           value={{ q: filters.q, priority: filters.priority, status: filters.status }}
           onChange={(patch) => setFilters(patch)}
@@ -108,23 +110,21 @@ export function DashboardPage() {
       </div>
 
       {isLoading && (
-        <div className="rounded-lg border border-dashed border-slate-300 bg-white p-12 text-center text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
+        <div className="surface-base border-subtle text-muted rounded-2xl border border-dashed p-16 text-center">
           {t('dashboard.loadingTasks')}
         </div>
       )}
 
       {isError && (
-        <div className="rounded-lg border border-rose-200 bg-rose-50 p-6 text-rose-700 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-300">
+        <div className="rounded-2xl border border-danger-200 bg-danger-50 p-6 text-danger-700 dark:border-danger-500/30 dark:bg-danger-500/10 dark:text-danger-300">
           {t('dashboard.loadFailed')}
         </div>
       )}
 
       {data && data.data.length === 0 && (
-        <div className="rounded-lg border border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-800">
-          <p className="font-medium text-slate-700 dark:text-slate-200">
-            {t('dashboard.noTasksTitle')}
-          </p>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        <div className="surface-base border-subtle rounded-2xl border border-dashed p-16 text-center">
+          <p className="text-base font-medium text-secondary">{t('dashboard.noTasksTitle')}</p>
+          <p className="text-muted mt-1.5 text-sm">
             {isActive ? t('dashboard.noTasksFiltered') : t('dashboard.noTasksEmpty')}
           </p>
         </div>
@@ -132,7 +132,9 @@ export function DashboardPage() {
 
       {data && data.data.length > 0 && (
         <>
-          <div className={`transition-opacity ${isFetching ? 'opacity-60' : ''}`}>
+          <div
+            className={`transition-opacity duration-200 ${isFetching ? 'opacity-60' : ''}`}
+          >
             <TaskBoard tasks={data.data} onCardClick={handleCardClick} />
           </div>
 

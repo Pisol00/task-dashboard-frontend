@@ -27,18 +27,17 @@ export function TaskCard({ task, onClick, className }: TaskCardProps) {
       type="button"
       onClick={() => onClick?.(task)}
       className={cn(
-        'group flex w-full flex-col gap-3 rounded-lg border border-slate-200 bg-white p-4 text-left shadow-sm transition-all',
-        'hover:border-indigo-300 hover:shadow-md',
-        'focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none',
-        'dark:border-slate-700 dark:bg-slate-800 dark:hover:border-indigo-500',
+        'group surface-base border-subtle flex w-full cursor-pointer flex-col gap-3 rounded-xl border p-5 text-left shadow-xs transition-all duration-200',
+        'hover:shadow-md hover:-translate-y-0.5',
+        'focus-visible:outline-none focus-visible:ring-brand',
         className,
       )}
     >
       <div className="space-y-1">
-        <h3 className="text-sm font-semibold text-slate-900 group-hover:text-indigo-700 dark:text-slate-100 dark:group-hover:text-indigo-300">
+        <h3 className="text-sm font-semibold text-primary transition-colors group-hover:text-brand-700 dark:group-hover:text-brand-300">
           {task.title}
         </h3>
-        <p className="text-xs text-slate-500 dark:text-slate-400">Web App Redesign</p>
+        <p className="text-xs text-muted">Web App Redesign</p>
       </div>
 
       <div className="flex flex-wrap items-center gap-1.5">
@@ -46,7 +45,7 @@ export function TaskCard({ task, onClick, className }: TaskCardProps) {
         <Badge tone={PRIORITY_TONE[task.priority]}>{PRIORITY_LABELS[task.priority]}</Badge>
       </div>
 
-      <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+      <div className="flex items-center gap-2 text-xs text-muted">
         <Calendar className="h-3.5 w-3.5" />
         <span>{formatDate(task.dueDate)}</span>
         <Badge tone={STATUS_TONE[task.status]} className="ml-1">
@@ -54,14 +53,10 @@ export function TaskCard({ task, onClick, className }: TaskCardProps) {
         </Badge>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2 pt-1">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
-            {t('task.progress')}
-          </span>
-          <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">
-            {task.progress}%
-          </span>
+          <span className="text-xs font-medium text-muted">{t('task.progress')}</span>
+          <span className="text-xs font-semibold text-secondary">{task.progress}%</span>
         </div>
         <div className="flex items-center gap-3">
           <ProgressBar

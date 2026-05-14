@@ -45,8 +45,7 @@ export function Dropdown({
         <div
           role="menu"
           className={cn(
-            'absolute z-40 mt-2 min-w-56 rounded-lg border border-slate-200 bg-white py-1 shadow-lg',
-            'dark:border-slate-700 dark:bg-slate-800',
+            'surface-base border-subtle absolute z-50 mt-2 min-w-56 rounded-xl border p-1.5 shadow-lg',
             align === 'end' ? 'right-0' : 'left-0',
             className,
           )}
@@ -79,11 +78,11 @@ export function DropdownItem({
       role="menuitem"
       onClick={onClick}
       className={cn(
-        'flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors',
+        'flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-left text-sm transition-colors duration-150',
         destructive
-          ? 'text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40'
-          : 'text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700',
-        selected && 'font-medium text-indigo-700 dark:text-indigo-300',
+          ? 'text-danger-600 hover:bg-danger-50 dark:hover:bg-danger-500/10'
+          : 'text-secondary hover:bg-[var(--surface-muted)]',
+        selected && 'bg-brand-50 font-medium text-brand-700 dark:bg-brand-500/10 dark:text-brand-300',
         className,
       )}
     >
@@ -94,12 +93,12 @@ export function DropdownItem({
 
 export function DropdownLabel({ children }: { children: ReactNode }) {
   return (
-    <div className="px-3 pt-2 pb-1 text-xs font-semibold tracking-wide text-slate-400 uppercase dark:text-slate-500">
+    <div className="text-subtle px-3 pt-2 pb-1.5 text-xs font-semibold tracking-wide uppercase">
       {children}
     </div>
   )
 }
 
 export function DropdownDivider() {
-  return <div className="my-1 h-px bg-slate-200 dark:bg-slate-700" />
+  return <div className="border-subtle my-1.5 h-px border-t" />
 }

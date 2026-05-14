@@ -24,13 +24,13 @@ export function TaskBoard({ tasks, onCardClick }: TaskBoardProps) {
   }, [tasks])
 
   return (
-    <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3">
+    <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-3">
       {TASK_STATUSES.map((status) => {
         const columnTasks = grouped[status]
         return (
           <TaskColumn key={status} status={status} count={columnTasks.length}>
             {columnTasks.length === 0 ? (
-              <div className="flex flex-1 items-center justify-center rounded-md border border-dashed border-slate-200 bg-white/40 p-6 text-center text-xs text-slate-400 dark:border-slate-700 dark:bg-slate-800/40 dark:text-slate-500">
+              <div className="border-subtle text-subtle flex flex-1 items-center justify-center rounded-xl border border-dashed bg-[var(--surface-base)]/40 p-6 text-center text-xs">
                 {t('board.noTasks')}
               </div>
             ) : (

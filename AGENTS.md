@@ -159,10 +159,25 @@ src/
 - Constants files: kebab-case (`query-keys.ts`).
 - Tests: `*.test.ts(x)` co-located (when added).
 
+### Git flow
+
+**GitHub Flow** — `main` is always deployable, work happens on short-lived `feat/<scope>` branches.
+
+```
+main → feat/<scope> → PR → merge commit → main
+```
+
+- One feature = one branch = one PR. Keep diffs small (~< 400 lines).
+- Never commit directly to `main`.
+- Branch naming: `feat/`, `fix/`, `refactor/`, `chore/`, `docs/` + kebab-case scope.
+- Merge strategy: **merge commit** (preserves branch history).
+- PRs via `gh pr create --fill` after pushing.
+
 ### Commits
 
-- Conventional Commits: `chore:`, `feat:`, `fix:`, `refactor:`, `docs:`, `build:`.
+- **Conventional Commits**: `chore:`, `feat:`, `fix:`, `refactor:`, `docs:`, `build:`.
 - Each commit has one clear scope (e.g. `feat: add task board with filters and pagination`).
+- See `CONTRIBUTING.md` for the full workflow.
 
 ---
 

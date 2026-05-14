@@ -1,10 +1,12 @@
-import { useState } from 'react'
 import { Outlet } from 'react-router'
+import { useLocalStorage } from '@/hooks'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
 
+const SIDEBAR_COLLAPSED_KEY = 'taskflow:sidebar-collapsed'
+
 export function AppLayout() {
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useLocalStorage(SIDEBAR_COLLAPSED_KEY, false)
 
   return (
     <div className="flex h-screen w-full bg-slate-50">

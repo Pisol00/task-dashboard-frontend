@@ -8,8 +8,9 @@ import {
   Settings,
   Users,
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { IconButton } from '@/components/ui'
 import { ROUTES } from '@/constants'
+import { cn } from '@/lib/utils'
 
 type NavItem = {
   to: string
@@ -38,7 +39,12 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         collapsed ? 'w-16' : 'w-60',
       )}
     >
-      <div className="flex h-16 items-center justify-between border-b border-slate-200 px-4">
+      <div
+        className={cn(
+          'flex h-16 items-center border-b border-slate-200 px-4',
+          collapsed ? 'justify-center' : 'justify-between',
+        )}
+      >
         <div className="flex items-center gap-2 overflow-hidden">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-600 font-semibold text-white">
             T
@@ -47,7 +53,21 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             <span className="truncate font-semibold text-slate-900">TaskFlow</span>
           )}
         </div>
+
+        {!collapsed && (
+          <IconButton label="Collapse sidebar" onClick={onToggle}>
+            <ChevronsLeft className="h-4 w-4" />
+          </IconButton>
+        )}
       </div>
+
+      {collapsed && (
+        <div className="flex justify-center px-2 pt-3">
+          <IconButton label="Expand sidebar" onClick={onToggle}>
+            <ChevronsRight className="h-4 w-4" />
+          </IconButton>
+        </div>
+      )}
 
       <nav className="flex-1 space-y-1 px-2 py-4">
         {NAV_ITEMS.map((item) => (
@@ -71,25 +91,6 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           </NavLink>
         ))}
       </nav>
-
-      <button
-        type="button"
-        onClick={onToggle}
-        className={cn(
-          'flex h-12 items-center gap-3 border-t border-slate-200 px-4 text-sm text-slate-500 hover:bg-slate-50 hover:text-slate-700',
-          collapsed && 'justify-center px-0',
-        )}
-        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-      >
-        {collapsed ? (
-          <ChevronsRight className="h-5 w-5" />
-        ) : (
-          <>
-            <ChevronsLeft className="h-5 w-5" />
-            <span>Collapse</span>
-          </>
-        )}
-      </button>
     </aside>
   )
 }

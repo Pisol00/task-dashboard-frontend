@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import {
   useCreateTask,
   useDeleteTask,
@@ -22,6 +23,7 @@ import type { Task } from '@/types'
 const PER_STATUS = 3
 
 export function DashboardPage() {
+  const { t } = useTranslation()
   const { filters, query, setFilters, clear, isActive } = useTaskFilters()
   const { data, isLoading, isError, isFetching } = useTasks({ ...query, limit: PER_STATUS })
 
@@ -87,14 +89,16 @@ export function DashboardPage() {
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-2xl font-semibold text-slate-900">Dashboard</h2>
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
+          {t('dashboard.title')}
+        </h2>
         <Button onClick={handleCreateClick}>
           <Plus className="h-4 w-4" />
-          New Task
+          {t('dashboard.newTask')}
         </Button>
       </div>
 
-      <div className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
+      <div className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-700 dark:bg-slate-800">
         <TaskFilters
           value={{ q: filters.q, priority: filters.priority, status: filters.status }}
           onChange={(patch) => setFilters(patch)}
@@ -104,22 +108,24 @@ export function DashboardPage() {
       </div>
 
       {isLoading && (
-        <div className="rounded-lg border border-dashed border-slate-300 bg-white p-12 text-center text-slate-500">
-          Loading tasks…
+        <div className="rounded-lg border border-dashed border-slate-300 bg-white p-12 text-center text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
+          {t('dashboard.loadingTasks')}
         </div>
       )}
 
       {isError && (
-        <div className="rounded-lg border border-rose-200 bg-rose-50 p-6 text-rose-700">
-          Failed to load tasks
+        <div className="rounded-lg border border-rose-200 bg-rose-50 p-6 text-rose-700 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-300">
+          {t('dashboard.loadFailed')}
         </div>
       )}
 
       {data && data.data.length === 0 && (
-        <div className="rounded-lg border border-dashed border-slate-300 bg-white p-12 text-center text-slate-500">
-          <p className="font-medium text-slate-700">No tasks found</p>
-          <p className="mt-1 text-sm">
-            {isActive ? 'Try adjusting your filters.' : 'Create your first task to get started.'}
+        <div className="rounded-lg border border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-800">
+          <p className="font-medium text-slate-700 dark:text-slate-200">
+            {t('dashboard.noTasksTitle')}
+          </p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            {isActive ? t('dashboard.noTasksFiltered') : t('dashboard.noTasksEmpty')}
           </p>
         </div>
       )}
@@ -158,17 +164,18 @@ export function DashboardPage() {
         open={confirmDelete.isOpen}
         onClose={confirmDelete.close}
         onConfirm={handleConfirmDelete}
-        title="Delete task?"
+        title={t('dialogs.deleteTitle')}
         description={
           selectedTask ? (
-            <>
-              This will permanently delete{' '}
-              <span className="font-semibold text-slate-900">{selectedTask.title}</span>. This
-              action cannot be undone.
-            </>
+            <span
+              dangerouslySetInnerHTML={{
+                __html: t('dialogs.deleteDescription', { title: selectedTask.title }),
+              }}
+            />
           ) : null
         }
-        confirmLabel="Delete"
+        confirmLabel={t('common.delete')}
+        cancelLabel={t('common.cancel')}
         isPending={deleteMutation.isPending}
       />
     </div>

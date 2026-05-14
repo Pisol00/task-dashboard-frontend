@@ -4,6 +4,7 @@ import { RouterProvider } from 'react-router'
 import { QueryProvider } from '@/app/QueryProvider'
 import { router } from '@/app/router'
 import { env } from '@/config/env'
+import '@/i18n'
 import '@/index.css'
 
 async function enableMocking() {

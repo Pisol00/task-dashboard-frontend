@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Button,
   Dialog,
@@ -70,6 +71,7 @@ export function TaskFormDialog({
   onSubmit,
   isSubmitting,
 }: TaskFormDialogProps) {
+  const { t } = useTranslation()
   const mode = task ? 'edit' : 'create'
   const [form, setForm] = useState<FormState>(() => (task ? fromTask(task) : emptyForm()))
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
@@ -98,9 +100,9 @@ export function TaskFormDialog({
 
   const validate = (): boolean => {
     const next: Partial<Record<keyof FormState, string>> = {}
-    if (!form.title.trim()) next.title = 'Title is required'
-    if (form.progress < 0 || form.progress > 100) next.progress = 'Progress must be 0–100'
-    if (!form.dueDate) next.dueDate = 'Due date is required'
+    if (!form.title.trim()) next.title = t('task.errors.titleRequired')
+    if (form.progress < 0 || form.progress > 100) next.progress = t('task.errors.progressRange')
+    if (!form.dueDate) next.dueDate = t('task.errors.dueDateRequired')
     setErrors(next)
     return Object.keys(next).length === 0
   }
@@ -128,55 +130,59 @@ export function TaskFormDialog({
     <Dialog
       open={open}
       onClose={onClose}
-      title={mode === 'create' ? 'Create new task' : 'Update task'}
+      title={mode === 'create' ? t('dialogs.createTitle') : t('dialogs.editTitle')}
       description={
-        mode === 'create' ? 'Add a new task to the board.' : 'Edit task details and save.'
+        mode === 'create' ? t('dialogs.createDescription') : t('dialogs.editDescription')
       }
       size="lg"
       footer={
         <>
           <Button variant="secondary" onClick={onClose} disabled={isSubmitting}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button type="submit" form="task-form" disabled={isSubmitting}>
-            {isSubmitting ? 'Saving…' : mode === 'create' ? 'Create' : 'Save changes'}
+            {isSubmitting
+              ? t('common.saving')
+              : mode === 'create'
+                ? t('common.create')
+                : t('common.saveChanges')}
           </Button>
         </>
       }
     >
       <form id="task-form" onSubmit={handleSubmit} className="space-y-4">
         <Input
-          label="Title"
+          label={t('task.title')}
           value={form.title}
           onChange={(e) => set('title', e.target.value)}
           error={errors.title}
-          placeholder="e.g. Implement dark mode"
+          placeholder={t('task.titlePlaceholder')}
           autoFocus
         />
 
         <Textarea
-          label="Description"
+          label={t('task.description')}
           value={form.description}
           onChange={(e) => set('description', e.target.value)}
-          placeholder="Optional details"
+          placeholder={t('task.descriptionPlaceholder')}
           rows={3}
         />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Select
-            label="Tag"
+            label={t('task.tag')}
             value={form.tag}
             onChange={(e) => set('tag', e.target.value as TaskTag)}
             options={TAG_OPTIONS}
           />
           <Select
-            label="Priority"
+            label={t('task.priority')}
             value={form.priority}
             onChange={(e) => set('priority', e.target.value as Priority)}
             options={PRIORITY_OPTIONS}
           />
           <Select
-            label="Status"
+            label={t('task.status')}
             value={form.status}
             onChange={(e) => set('status', e.target.value as TaskStatus)}
             options={STATUS_OPTIONS}
@@ -185,14 +191,14 @@ export function TaskFormDialog({
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Input
-            label="Due date"
+            label={t('task.dueDate')}
             type="date"
             value={form.dueDate}
             onChange={(e) => set('dueDate', e.target.value)}
             error={errors.dueDate}
           />
           <Input
-            label="Progress (%)"
+            label={t('task.progressLabel')}
             type="number"
             min={0}
             max={100}
@@ -203,8 +209,10 @@ export function TaskFormDialog({
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700">Assignees</label>
-          <div className="grid grid-cols-1 gap-2 rounded-md border border-slate-200 p-3 sm:grid-cols-2">
+          <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
+            {t('task.assignees')}
+          </label>
+          <div className="grid grid-cols-1 gap-2 rounded-md border border-slate-200 p-3 sm:grid-cols-2 dark:border-slate-700">
             {users?.map((user) => {
               const checked = form.assigneeIds.includes(user.id)
               return (
@@ -212,7 +220,9 @@ export function TaskFormDialog({
                   key={user.id}
                   className={cn(
                     'flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors',
-                    checked ? 'bg-indigo-50 text-indigo-900' : 'hover:bg-slate-50',
+                    checked
+                      ? 'bg-indigo-50 text-indigo-900 dark:bg-indigo-500/15 dark:text-indigo-200'
+                      : 'text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700/50',
                   )}
                 >
                   <input

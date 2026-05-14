@@ -1,0 +1,98 @@
+{
+  "common": {
+    "close": "ปิด",
+    "cancel": "ยกเลิก",
+    "save": "บันทึก",
+    "saveChanges": "บันทึกการเปลี่ยนแปลง",
+    "create": "สร้าง",
+    "delete": "ลบ",
+    "update": "อัปเดต",
+    "confirm": "ยืนยัน",
+    "loading": "กำลังโหลด…",
+    "saving": "กำลังบันทึก…",
+    "working": "กำลังดำเนินการ…",
+    "search": "ค้นหา"
+  },
+  "nav": {
+    "dashboard": "แดชบอร์ด",
+    "myTasks": "งานของฉัน",
+    "dailyGraph": "กราฟรายวัน",
+    "team": "ทีม",
+    "settings": "ตั้งค่า"
+  },
+  "sidebar": {
+    "collapse": "ย่อแถบด้านข้าง",
+    "expand": "ขยายแถบด้านข้าง"
+  },
+  "header": {
+    "notifications": "การแจ้งเตือน",
+    "profile": "โปรไฟล์",
+    "logout": "ออกจากระบบ"
+  },
+  "preferences": {
+    "theme": "ธีม",
+    "themeLight": "สว่าง",
+    "themeDark": "มืด",
+    "themeSystem": "ตามระบบ",
+    "language": "ภาษา",
+    "languageEn": "อังกฤษ",
+    "languageTh": "ไทย"
+  },
+  "dashboard": {
+    "title": "แดชบอร์ด",
+    "newTask": "งานใหม่",
+    "loadingTasks": "กำลังโหลดงาน…",
+    "loadFailed": "โหลดงานไม่สำเร็จ",
+    "noTasksTitle": "ไม่พบงาน",
+    "noTasksFiltered": "ลองปรับตัวกรองดู",
+    "noTasksEmpty": "สร้างงานแรกของคุณเพื่อเริ่มต้น"
+  },
+  "filters": {
+    "searchPlaceholder": "ค้นหางาน...",
+    "allPriorities": "ความสำคัญทั้งหมด",
+    "statusAll": "สถานะ: ทั้งหมด",
+    "clear": "ล้างตัวกรอง"
+  },
+  "board": {
+    "noTasks": "ไม่มีงาน",
+    "todo": "รอดำเนินการ",
+    "inProgress": "กำลังทำ",
+    "done": "เสร็จสิ้น"
+  },
+  "task": {
+    "title": "ชื่องาน",
+    "titlePlaceholder": "เช่น เพิ่มโหมดมืด",
+    "description": "รายละเอียด",
+    "descriptionPlaceholder": "รายละเอียดเพิ่มเติม (ไม่บังคับ)",
+    "tag": "ป้ายกำกับ",
+    "priority": "ความสำคัญ",
+    "status": "สถานะ",
+    "dueDate": "กำหนดส่ง",
+    "progress": "ความคืบหน้า",
+    "progressLabel": "ความคืบหน้า (%)",
+    "assignees": "ผู้รับผิดชอบ",
+    "assigneesCount": "ผู้รับผิดชอบ ({{count}})",
+    "noOneAssigned": "ยังไม่มีผู้รับผิดชอบ",
+    "errors": {
+      "titleRequired": "กรุณากรอกชื่องาน",
+      "progressRange": "ความคืบหน้าต้องอยู่ระหว่าง 0–100",
+      "dueDateRequired": "กรุณาเลือกกำหนดส่ง"
+    }
+  },
+  "dialogs": {
+    "createTitle": "สร้างงานใหม่",
+    "createDescription": "เพิ่มงานใหม่เข้าสู่บอร์ด",
+    "editTitle": "อัปเดตงาน",
+    "editDescription": "แก้ไขรายละเอียดงานแล้วบันทึก",
+    "deleteTitle": "ลบงาน?",
+    "deleteDescription": "การลบ <strong>{{title}}</strong> จะเป็นการลบถาวร ไม่สามารถย้อนกลับได้"
+  },
+  "errors": {
+    "boundaryTitle": "เกิดข้อผิดพลาดบางอย่าง",
+    "tryAgain": "ลองอีกครั้ง",
+    "notFoundCode": "404",
+    "notFoundTitle": "ไม่พบหน้าที่ค้นหา",
+    "notFoundDescription": "หน้านี้ไม่มีอยู่ในระบบ",
+    "backToDashboard": "กลับสู่แดชบอร์ด"
+  }
+}

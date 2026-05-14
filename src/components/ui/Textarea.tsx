@@ -17,7 +17,10 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
   return (
     <div className={cn('flex flex-col gap-1', containerClassName)}>
       {label && (
-        <label htmlFor={textareaId} className="text-sm font-medium text-slate-700">
+        <label
+          htmlFor={textareaId}
+          className="text-sm font-medium text-slate-700 dark:text-slate-200"
+        >
           {label}
         </label>
       )}
@@ -31,6 +34,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
           'placeholder:text-slate-400',
           'focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-0 focus:outline-none',
           'disabled:cursor-not-allowed disabled:bg-slate-50',
+          'dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500',
           'resize-y',
           error && 'border-rose-400 focus:border-rose-500 focus:ring-rose-500',
           className,

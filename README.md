@@ -1,73 +1,82 @@
-# React + TypeScript + Vite
+# TaskFlow — Task Dashboard Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dashboard for tracking tasks with kanban board, filters, pagination, and a multi-axis hourly chart.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Framework**: Vite + React 19 + TypeScript
+- **Styling**: Tailwind CSS v4
+- **Routing**: React Router v7
+- **Data**: TanStack Query
+- **Mocks**: MSW (Mock Service Worker)
+- **Icons**: lucide-react
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+# Install
+npm install
 
-## Expanding the ESLint configuration
+# Run dev server (with MSW mocks)
+npm run dev
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Type check
+npm run typecheck
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Lint & format
+npm run lint
+npm run format
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Environment
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Copy `.env.example` to `.env` and adjust values:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Variable | Description |
+|---|---|
+| `VITE_API_BASE_URL` | Base path for API calls (default `/api`) |
+| `VITE_ENABLE_MOCKS` | Set `true` to start MSW worker in browser |
+| `VITE_APP_NAME` | Display name in UI |
+
+## Project Structure
+
 ```
+src/
+├── app/                      # App-level setup (router, providers)
+├── components/
+│   ├── ui/                   # Primitives — Button, Input, Dialog, Badge (no domain logic)
+│   ├── shared/               # Composite/cross-feature — ErrorBoundary, Pagination, layout/
+│   │   └── layout/           #   AppLayout, Sidebar, Header
+│   └── features/             # Business slices — each self-contained
+│       └── <feature>/
+│           ├── api/          #     Query/mutation hooks + API calls
+│           ├── components/   #     Feature-scoped UI
+│           ├── hooks/        #     Feature-scoped hooks
+│           └── utils/
+├── pages/                    # Route components (thin — compose features)
+├── hooks/                    # Shared hooks (useDebounce, useDisclosure, ...)
+├── lib/                      # Framework-agnostic utilities (api-client, cn)
+├── config/                   # Validated env, runtime configuration
+├── constants/                # Query keys, route paths, enum metadata
+├── types/                    # Shared TypeScript types
+├── mocks/                    # MSW handlers + fixtures
+├── index.css                 # Tailwind entry + global styles
+└── main.tsx
+```
+
+### Component layers
+
+| Layer | Knows about domain? | Examples |
+|---|---|---|
+| `components/ui/` | ❌ | Button, Input, Select, Dialog, Badge |
+| `components/shared/` | ❌ (but composite) | ErrorBoundary, Pagination, EmptyState, AppLayout, Sidebar |
+| `components/features/<name>/` | ✅ | TaskCard, TaskBoard, TaskFilters, DailyChart |
+
+### Conventions
+
+- **Imports** use the `@/*` alias for `src/*`.
+- **Pages stay thin** — orchestrate features, no business logic.
+- **Features are self-contained** — UI, hooks, and API calls live together.
+- **Shared things go up** — anything used by 2+ features moves to `hooks/`, `lib/`, or `components/common/`.
+- **Constants over magic strings** — query keys, routes, and enum metadata centralized in `constants/`.
+- **Types are explicit** — `import type` for type-only imports (required by `verbatimModuleSyntax`).

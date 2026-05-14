@@ -1,6 +1,8 @@
-import type { Paginated, Task, TaskListQuery } from '@/types'
+import type { Paginated, Task, TaskListQuery, TaskStatus } from '@/types'
 import { TASKS } from './fixtures/tasks'
 import { USERS } from './fixtures/users'
+
+const STATUSES: TaskStatus[] = ['To Do', 'In Progress', 'Done']
 
 let tasks: Task[] = TASKS.map((t) => ({ ...t, assignees: [...t.assignees] }))
 
@@ -14,7 +16,7 @@ function nowIso() {
 
 export const db = {
   listTasks(query: TaskListQuery = {}): Paginated<Task> {
-    const { q, priority, status, page = 1, limit = 6 } = query
+    const { q, priority, status, page = 1, limit = 3 } = query
 
     const filtered = tasks.filter((t) => {
       if (q && !t.title.toLowerCase().includes(q.toLowerCase())) return false
@@ -23,13 +25,14 @@ export const db = {
       return true
     })
 
-    const total = filtered.length
-    const totalPages = Math.max(1, Math.ceil(total / limit))
+    const perStatus = STATUSES.map((s) => filtered.filter((t) => t.status === s))
+    const totalPages = Math.max(1, ...perStatus.map((arr) => Math.ceil(arr.length / limit)))
     const safePage = Math.min(Math.max(1, page), totalPages)
-    const start = (safePage - 1) * limit
-    const data = filtered.slice(start, start + limit)
 
-    return { data, page: safePage, limit, total, totalPages }
+    const start = (safePage - 1) * limit
+    const data = perStatus.flatMap((arr) => arr.slice(start, start + limit))
+
+    return { data, page: safePage, limit, total: filtered.length, totalPages }
   },
 
   getTask(id: string): Task | undefined {

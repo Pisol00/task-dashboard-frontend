@@ -1,4 +1,4 @@
-import { Calendar, Pencil } from 'lucide-react'
+import { Calendar, Pencil, Trash2 } from 'lucide-react'
 import { AvatarStack, Badge, Button, Dialog, ProgressBar } from '@/components/ui'
 import { PRIORITY_LABELS } from '@/constants'
 import type { Task } from '@/types'
@@ -10,9 +10,16 @@ type TaskDetailDialogProps = {
   open: boolean
   onClose: () => void
   onEdit?: (task: Task) => void
+  onDelete?: (task: Task) => void
 }
 
-export function TaskDetailDialog({ task, open, onClose, onEdit }: TaskDetailDialogProps) {
+export function TaskDetailDialog({
+  task,
+  open,
+  onClose,
+  onEdit,
+  onDelete,
+}: TaskDetailDialogProps) {
   if (!task) return null
 
   return (
@@ -23,17 +30,27 @@ export function TaskDetailDialog({ task, open, onClose, onEdit }: TaskDetailDial
       description="Web App Redesign"
       size="md"
       footer={
-        <>
-          <Button variant="secondary" onClick={onClose}>
-            Close
-          </Button>
-          {onEdit && (
-            <Button onClick={() => onEdit(task)}>
-              <Pencil className="h-4 w-4" />
-              Update
+        <div className="flex w-full items-center justify-between gap-2">
+          <div>
+            {onDelete && (
+              <Button variant="ghost" onClick={() => onDelete(task)} className="text-rose-600">
+                <Trash2 className="h-4 w-4" />
+                Delete
+              </Button>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="secondary" onClick={onClose}>
+              Close
             </Button>
-          )}
-        </>
+            {onEdit && (
+              <Button onClick={() => onEdit(task)}>
+                <Pencil className="h-4 w-4" />
+                Update
+              </Button>
+            )}
+          </div>
+        </div>
       }
     >
       <div className="space-y-5">

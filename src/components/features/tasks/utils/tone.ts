@@ -19,12 +19,6 @@ export const TAG_TONE: Record<TaskTag, string> = {
   Docs: 'bg-sky-100 text-sky-700',
 }
 
-export const COLUMN_ACCENT: Record<TaskStatus, string> = {
-  'To Do': 'border-t-slate-400',
-  'In Progress': 'border-t-amber-400',
-  Done: 'border-t-emerald-400',
-}
-
 export const PROGRESS_BAR_TONE: Record<TaskStatus, string> = {
   'To Do': 'bg-slate-400',
   'In Progress': 'bg-amber-500',

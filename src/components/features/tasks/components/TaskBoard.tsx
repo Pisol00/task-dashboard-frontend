@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { TASK_STATUSES } from '@/constants'
 import type { Task, TaskStatus } from '@/types'
 import { TaskCard } from './TaskCard'
@@ -10,6 +11,8 @@ type TaskBoardProps = {
 }
 
 export function TaskBoard({ tasks, onCardClick }: TaskBoardProps) {
+  const { t } = useTranslation()
+
   const grouped = useMemo(() => {
     const map: Record<TaskStatus, Task[]> = {
       'To Do': [],
@@ -21,15 +24,15 @@ export function TaskBoard({ tasks, onCardClick }: TaskBoardProps) {
   }, [tasks])
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+    <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3">
       {TASK_STATUSES.map((status) => {
         const columnTasks = grouped[status]
         return (
           <TaskColumn key={status} status={status} count={columnTasks.length}>
             {columnTasks.length === 0 ? (
-              <p className="rounded-md border border-dashed border-slate-200 bg-white/40 p-6 text-center text-xs text-slate-400">
-                No tasks
-              </p>
+              <div className="flex flex-1 items-center justify-center rounded-md border border-dashed border-slate-200 bg-white/40 p-6 text-center text-xs text-slate-400 dark:border-slate-700 dark:bg-slate-800/40 dark:text-slate-500">
+                {t('board.noTasks')}
+              </div>
             ) : (
               columnTasks.map((task) => (
                 <TaskCard key={task.id} task={task} onClick={onCardClick} />

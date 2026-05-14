@@ -1,0 +1,98 @@
+{
+  "common": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saveChanges": "Save changes",
+    "create": "Create",
+    "delete": "Delete",
+    "update": "Update",
+    "confirm": "Confirm",
+    "loading": "Loading…",
+    "saving": "Saving…",
+    "working": "Working…",
+    "search": "Search"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "myTasks": "My Tasks",
+    "dailyGraph": "Daily Graph",
+    "team": "Team",
+    "settings": "Settings"
+  },
+  "sidebar": {
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar"
+  },
+  "header": {
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "logout": "Log out"
+  },
+  "preferences": {
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "language": "Language",
+    "languageEn": "English",
+    "languageTh": "Thai"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "newTask": "New Task",
+    "loadingTasks": "Loading tasks…",
+    "loadFailed": "Failed to load tasks",
+    "noTasksTitle": "No tasks found",
+    "noTasksFiltered": "Try adjusting your filters.",
+    "noTasksEmpty": "Create your first task to get started."
+  },
+  "filters": {
+    "searchPlaceholder": "Search tasks...",
+    "allPriorities": "All Priorities",
+    "statusAll": "Status: All",
+    "clear": "Clear filters"
+  },
+  "board": {
+    "noTasks": "No tasks",
+    "todo": "To Do",
+    "inProgress": "In Progress",
+    "done": "Done"
+  },
+  "task": {
+    "title": "Title",
+    "titlePlaceholder": "e.g. Implement dark mode",
+    "description": "Description",
+    "descriptionPlaceholder": "Optional details",
+    "tag": "Tag",
+    "priority": "Priority",
+    "status": "Status",
+    "dueDate": "Due date",
+    "progress": "Progress",
+    "progressLabel": "Progress (%)",
+    "assignees": "Assignees",
+    "assigneesCount": "Assignees ({{count}})",
+    "noOneAssigned": "No one assigned",
+    "errors": {
+      "titleRequired": "Title is required",
+      "progressRange": "Progress must be 0–100",
+      "dueDateRequired": "Due date is required"
+    }
+  },
+  "dialogs": {
+    "createTitle": "Create new task",
+    "createDescription": "Add a new task to the board.",
+    "editTitle": "Update task",
+    "editDescription": "Edit task details and save.",
+    "deleteTitle": "Delete task?",
+    "deleteDescription": "This will permanently delete <strong>{{title}}</strong>. This action cannot be undone."
+  },
+  "errors": {
+    "boundaryTitle": "Something went wrong",
+    "tryAgain": "Try again",
+    "notFoundCode": "404",
+    "notFoundTitle": "Page not found",
+    "notFoundDescription": "The page you are looking for doesn't exist.",
+    "backToDashboard": "Back to Dashboard"
+  }
+}

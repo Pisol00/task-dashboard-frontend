@@ -58,7 +58,7 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
               'focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none',
               item === page
                 ? 'bg-indigo-600 text-white'
-                : 'text-slate-600 hover:bg-slate-100',
+                : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700',
             )}
           >
             {item}

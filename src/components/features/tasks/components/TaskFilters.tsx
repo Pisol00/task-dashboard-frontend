@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Search, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Button, Input, Select, type SelectOption } from '@/components/ui'
 import { PRIORITIES, TASK_STATUSES } from '@/constants'
 import { useDebounce } from '@/hooks'
@@ -18,17 +19,8 @@ type TaskFiltersProps = {
   isActive: boolean
 }
 
-const PRIORITY_OPTIONS: SelectOption[] = [
-  { value: 'All', label: 'All Priorities' },
-  ...PRIORITIES.map((p) => ({ value: p, label: p })),
-]
-
-const STATUS_OPTIONS: SelectOption[] = [
-  { value: 'All', label: 'Status: All' },
-  ...TASK_STATUSES.map((s) => ({ value: s, label: s })),
-]
-
 export function TaskFilters({ value, onChange, onClear, isActive }: TaskFiltersProps) {
+  const { t } = useTranslation()
   const [searchInput, setSearchInput] = useState(value.q)
   const debouncedSearch = useDebounce(searchInput, 300)
 
@@ -41,11 +33,29 @@ export function TaskFilters({ value, onChange, onClear, isActive }: TaskFiltersP
     setSearchInput(value.q)
   }, [value.q])
 
+  const priorityOptions: SelectOption[] = useMemo(
+    () => [
+      { value: 'All', label: t('filters.allPriorities') },
+      ...PRIORITIES.map((p) => ({ value: p, label: p })),
+    ],
+    [t],
+  )
+
+  const statusOptions: SelectOption[] = useMemo(
+    () => [
+      { value: 'All', label: t('filters.statusAll') },
+      ...TASK_STATUSES.map((s) => ({ value: s, label: s })),
+    ],
+    [t],
+  )
+
+  const clearLabel = t('filters.clear')
+
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
       <Input
         type="search"
-        placeholder="Search tasks..."
+        placeholder={t('filters.searchPlaceholder')}
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
         leadingIcon={<Search className="h-4 w-4" />}
@@ -55,14 +65,14 @@ export function TaskFilters({ value, onChange, onClear, isActive }: TaskFiltersP
       <Select
         value={value.priority}
         onChange={(e) => onChange({ priority: e.target.value as Priority | 'All' })}
-        options={PRIORITY_OPTIONS}
+        options={priorityOptions}
         containerClassName="sm:w-44"
       />
 
       <Select
         value={value.status}
         onChange={(e) => onChange({ status: e.target.value as TaskStatus | 'All' })}
-        options={STATUS_OPTIONS}
+        options={statusOptions}
         containerClassName="sm:w-44"
       />
 
@@ -72,8 +82,8 @@ export function TaskFilters({ value, onChange, onClear, isActive }: TaskFiltersP
         onClick={onClear}
         disabled={!isActive}
         className="sm:px-2"
-        aria-label="Clear filters"
-        title="Clear filters"
+        aria-label={clearLabel}
+        title={clearLabel}
       >
         <X className="h-4 w-4" />
       </Button>

@@ -9,7 +9,7 @@ export function AppLayout() {
   const [collapsed, setCollapsed] = useLocalStorage(SIDEBAR_COLLAPSED_KEY, false)
 
   return (
-    <div className="flex h-screen w-full bg-slate-50">
+    <div className="flex h-screen w-full bg-slate-50 dark:bg-slate-900">
       <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((v) => !v)} />
       <div className="flex min-w-0 flex-1 flex-col">
         <Header />

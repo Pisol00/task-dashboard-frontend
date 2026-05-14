@@ -1,13 +1,28 @@
+import { useState } from 'react'
 import { useTasks } from '@/components/features/tasks/api'
-import { TaskBoard, TaskFilters } from '@/components/features/tasks/components'
+import {
+  TaskBoard,
+  TaskDetailDialog,
+  TaskFilters,
+} from '@/components/features/tasks/components'
 import { useTaskFilters } from '@/components/features/tasks/hooks'
 import { Pagination } from '@/components/shared/Pagination'
+import { useDisclosure } from '@/hooks'
+import type { Task } from '@/types'
 
 const PER_STATUS = 3
 
 export function DashboardPage() {
   const { filters, query, setFilters, clear, isActive } = useTaskFilters()
   const { data, isLoading, isError, isFetching } = useTasks({ ...query, limit: PER_STATUS })
+
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+  const detailDialog = useDisclosure()
+
+  const handleCardClick = (task: Task) => {
+    setSelectedTask(task)
+    detailDialog.open()
+  }
 
   return (
     <div className="space-y-4">
@@ -43,10 +58,7 @@ export function DashboardPage() {
       {data && data.data.length > 0 && (
         <>
           <div className={`transition-opacity ${isFetching ? 'opacity-60' : ''}`}>
-            <TaskBoard
-              tasks={data.data}
-              onCardClick={(t) => console.log('clicked', t.id)}
-            />
+            <TaskBoard tasks={data.data} onCardClick={handleCardClick} />
           </div>
 
           <Pagination
@@ -56,6 +68,12 @@ export function DashboardPage() {
           />
         </>
       )}
+
+      <TaskDetailDialog
+        task={selectedTask}
+        open={detailDialog.isOpen}
+        onClose={detailDialog.close}
+      />
     </div>
   )
 }

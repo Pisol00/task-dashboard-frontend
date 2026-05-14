@@ -1,12 +1,19 @@
 import { useState } from 'react'
-import { useTasks } from '@/components/features/tasks/api'
+import { Plus } from 'lucide-react'
+import {
+  useCreateTask,
+  useTasks,
+  useUpdateTask,
+} from '@/components/features/tasks/api'
 import {
   TaskBoard,
   TaskDetailDialog,
   TaskFilters,
+  TaskFormDialog,
 } from '@/components/features/tasks/components'
 import { useTaskFilters } from '@/components/features/tasks/hooks'
 import { Pagination } from '@/components/shared/Pagination'
+import { Button } from '@/components/ui'
 import { useDisclosure } from '@/hooks'
 import type { Task } from '@/types'
 
@@ -18,16 +25,49 @@ export function DashboardPage() {
 
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const detailDialog = useDisclosure()
+  const formDialog = useDisclosure()
+  const [formMode, setFormMode] = useState<'create' | 'edit'>('create')
+
+  const createMutation = useCreateTask()
+  const updateMutation = useUpdateTask()
 
   const handleCardClick = (task: Task) => {
     setSelectedTask(task)
     detailDialog.open()
   }
 
+  const handleCreateClick = () => {
+    setSelectedTask(null)
+    setFormMode('create')
+    formDialog.open()
+  }
+
+  const handleEditClick = (task: Task) => {
+    detailDialog.close()
+    setSelectedTask(task)
+    setFormMode('edit')
+    formDialog.open()
+  }
+
+  const handleSubmit = async (input: Parameters<typeof createMutation.mutateAsync>[0]) => {
+    if (formMode === 'edit' && selectedTask) {
+      await updateMutation.mutateAsync({ id: selectedTask.id, patch: input })
+    } else {
+      await createMutation.mutateAsync(input)
+    }
+    formDialog.close()
+  }
+
+  const isSubmitting = createMutation.isPending || updateMutation.isPending
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold text-slate-900">Dashboard</h2>
+        <Button onClick={handleCreateClick}>
+          <Plus className="h-4 w-4" />
+          New Task
+        </Button>
       </div>
 
       <TaskFilters
@@ -73,6 +113,15 @@ export function DashboardPage() {
         task={selectedTask}
         open={detailDialog.isOpen}
         onClose={detailDialog.close}
+        onEdit={handleEditClick}
+      />
+
+      <TaskFormDialog
+        open={formDialog.isOpen}
+        onClose={formDialog.close}
+        task={formMode === 'edit' ? selectedTask : null}
+        onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
       />
     </div>
   )

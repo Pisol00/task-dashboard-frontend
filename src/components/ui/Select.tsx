@@ -26,12 +26,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
   const selectId = id ?? fallbackId
 
   return (
-    <div className={cn('flex flex-col gap-1', containerClassName)}>
+    <div className={cn('flex flex-col gap-1.5', containerClassName)}>
       {label && (
-        <label
-          htmlFor={selectId}
-          className="text-sm font-medium text-slate-700 dark:text-slate-200"
-        >
+        <label htmlFor={selectId} className="text-sm font-medium text-secondary">
           {label}
         </label>
       )}
@@ -41,11 +38,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
           id={selectId}
           aria-invalid={error ? true : undefined}
           className={cn(
-            'h-9 w-full appearance-none rounded-md border border-slate-300 bg-white pr-9 pl-3 text-sm text-slate-900',
-            'focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none',
-            'disabled:cursor-not-allowed disabled:bg-slate-50',
-            'dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100',
-            error && 'border-rose-400 focus:border-rose-500 focus:ring-rose-500',
+            'h-10 w-full cursor-pointer appearance-none rounded-lg border border-subtle bg-[var(--surface-base)] pr-10 pl-3 text-sm text-primary',
+            'focus:border-brand-500 focus:outline-none',
+            'disabled:cursor-not-allowed disabled:opacity-60',
+            error && 'border-danger-500 focus:border-danger-500',
             className,
           )}
           {...rest}
@@ -61,9 +57,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
             </option>
           ))}
         </select>
-        <ChevronDown className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <ChevronDown className="text-subtle pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2" />
       </div>
-      {error && <span className="text-xs text-rose-600">{error}</span>}
+      {error && <span className="text-xs text-danger-600">{error}</span>}
     </div>
   )
 })

@@ -21,20 +21,15 @@ export function TaskColumn({ status, count, children, className }: TaskColumnPro
 
   return (
     <section
-      className={cn(
-        'flex min-w-0 flex-col rounded-lg bg-slate-50/60 dark:bg-slate-800/50',
-        className,
-      )}
+      className={cn('surface-sunken flex min-w-0 flex-col rounded-2xl', className)}
     >
-      <header className="flex items-center justify-between px-4 py-3">
-        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-          {t(STATUS_KEY[status])}
-        </h3>
-        <span className="rounded-full bg-white px-2 py-0.5 text-xs font-medium text-slate-600 shadow-sm dark:bg-slate-700 dark:text-slate-300">
+      <header className="flex items-center justify-between px-5 py-4">
+        <h3 className="text-sm font-semibold text-secondary">{t(STATUS_KEY[status])}</h3>
+        <span className="surface-base border-subtle rounded-full border px-2.5 py-0.5 text-xs font-medium text-secondary">
           {count}
         </span>
       </header>
-      <div className="flex flex-1 flex-col gap-3 p-3 pt-0">{children}</div>
+      <div className="flex flex-1 flex-col gap-3 px-3 pb-3">{children}</div>
     </section>
   )
 }

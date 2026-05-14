@@ -44,7 +44,7 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
 
       {visible.map((item, idx) =>
         item === 'ellipsis' ? (
-          <span key={`e${idx}`} className="px-2 text-sm text-slate-400">
+          <span key={`e${idx}`} className="text-subtle px-2 text-sm">
             …
           </span>
         ) : (
@@ -54,11 +54,11 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
             onClick={() => onPageChange(item)}
             aria-current={item === page ? 'page' : undefined}
             className={cn(
-              'h-8 min-w-8 rounded-md px-2 text-sm font-medium transition-colors',
-              'focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none',
+              'h-9 min-w-9 cursor-pointer rounded-lg px-2 text-sm font-medium transition-colors duration-150',
+              'focus-visible:outline-none focus-visible:ring-brand',
               item === page
-                ? 'bg-indigo-600 text-white'
-                : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700',
+                ? 'bg-brand-600 text-white shadow-sm'
+                : 'text-muted hover:bg-[var(--surface-muted)] hover:text-primary',
             )}
           >
             {item}

@@ -7,18 +7,16 @@ export function NotFoundPage() {
 
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
-      <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">
+      <p className="text-sm font-semibold text-brand-600 dark:text-brand-400">
         {t('errors.notFoundCode')}
       </p>
-      <h1 className="mt-2 text-3xl font-semibold text-slate-900 dark:text-slate-100">
+      <h1 className="mt-2 text-3xl font-semibold tracking-tight text-primary">
         {t('errors.notFoundTitle')}
       </h1>
-      <p className="mt-2 text-slate-500 dark:text-slate-400">
-        {t('errors.notFoundDescription')}
-      </p>
+      <p className="mt-2 text-muted">{t('errors.notFoundDescription')}</p>
       <Link
         to={ROUTES.dashboard}
-        className="mt-6 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+        className="mt-6 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-brand-700"
       >
         {t('errors.backToDashboard')}
       </Link>

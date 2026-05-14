@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Search, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Button, Input, Select, type SelectOption } from '@/components/ui'
+import { Button, Combobox, Input, type ComboboxOption } from '@/components/ui'
 import { PRIORITIES, TASK_STATUSES } from '@/constants'
 import { useDebounce } from '@/hooks'
 import type { Priority, TaskStatus } from '@/types'
@@ -33,7 +33,7 @@ export function TaskFilters({ value, onChange, onClear, isActive }: TaskFiltersP
     setSearchInput(value.q)
   }, [value.q])
 
-  const priorityOptions: SelectOption[] = useMemo(
+  const priorityOptions: ComboboxOption<Priority | 'All'>[] = useMemo(
     () => [
       { value: 'All', label: t('filters.allPriorities') },
       ...PRIORITIES.map((p) => ({ value: p, label: p })),
@@ -41,7 +41,7 @@ export function TaskFilters({ value, onChange, onClear, isActive }: TaskFiltersP
     [t],
   )
 
-  const statusOptions: SelectOption[] = useMemo(
+  const statusOptions: ComboboxOption<TaskStatus | 'All'>[] = useMemo(
     () => [
       { value: 'All', label: t('filters.statusAll') },
       ...TASK_STATUSES.map((s) => ({ value: s, label: s })),
@@ -62,16 +62,16 @@ export function TaskFilters({ value, onChange, onClear, isActive }: TaskFiltersP
         containerClassName="flex-1"
       />
 
-      <Select
+      <Combobox<Priority | 'All'>
         value={value.priority}
-        onChange={(e) => onChange({ priority: e.target.value as Priority | 'All' })}
+        onChange={(v) => onChange({ priority: v })}
         options={priorityOptions}
         containerClassName="sm:w-44"
       />
 
-      <Select
+      <Combobox<TaskStatus | 'All'>
         value={value.status}
-        onChange={(e) => onChange({ status: e.target.value as TaskStatus | 'All' })}
+        onChange={(v) => onChange({ status: v })}
         options={statusOptions}
         containerClassName="sm:w-44"
       />
@@ -81,7 +81,7 @@ export function TaskFilters({ value, onChange, onClear, isActive }: TaskFiltersP
         size="md"
         onClick={onClear}
         disabled={!isActive}
-        className="sm:px-2"
+        className="sm:px-2.5"
         aria-label={clearLabel}
         title={clearLabel}
       >

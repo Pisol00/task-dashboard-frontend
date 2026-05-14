@@ -30,7 +30,7 @@ export function Avatar({ user, size = 'md', className }: AvatarProps) {
     <span
       title={user.name}
       className={cn(
-        'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-indigo-100 font-semibold text-indigo-700 ring-2 ring-white',
+        'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-brand-100 font-semibold text-brand-700 ring-2 ring-[var(--surface-base)]',
         SIZE_CLASSES[size],
         className,
       )}
@@ -62,7 +62,7 @@ export function AvatarStack({ users, max = 3, size = 'sm' }: AvatarStackProps) {
       {overflow > 0 && (
         <span
           className={cn(
-            'inline-flex items-center justify-center rounded-full bg-slate-200 font-semibold text-slate-600 ring-2 ring-white',
+            'text-muted inline-flex items-center justify-center rounded-full bg-[var(--surface-muted)] font-semibold ring-2 ring-[var(--surface-base)]',
             SIZE_CLASSES[size],
           )}
         >

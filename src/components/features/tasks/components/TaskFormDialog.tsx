@@ -2,11 +2,11 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Button,
+  Combobox,
   Dialog,
   Input,
-  Select,
   Textarea,
-  type SelectOption,
+  type ComboboxOption,
 } from '@/components/ui'
 import { PRIORITIES, TASK_STATUSES, TASK_TAGS } from '@/constants'
 import { cn } from '@/lib/utils'
@@ -33,9 +33,15 @@ type FormState = {
   assigneeIds: string[]
 }
 
-const TAG_OPTIONS: SelectOption[] = TASK_TAGS.map((t) => ({ value: t, label: t }))
-const PRIORITY_OPTIONS: SelectOption[] = PRIORITIES.map((p) => ({ value: p, label: p }))
-const STATUS_OPTIONS: SelectOption[] = TASK_STATUSES.map((s) => ({ value: s, label: s }))
+const TAG_OPTIONS: ComboboxOption<TaskTag>[] = TASK_TAGS.map((t) => ({ value: t, label: t }))
+const PRIORITY_OPTIONS: ComboboxOption<Priority>[] = PRIORITIES.map((p) => ({
+  value: p,
+  label: p,
+}))
+const STATUS_OPTIONS: ComboboxOption<TaskStatus>[] = TASK_STATUSES.map((s) => ({
+  value: s,
+  label: s,
+}))
 
 function emptyForm(): FormState {
   const today = new Date().toISOString().slice(0, 10)
@@ -169,22 +175,22 @@ export function TaskFormDialog({
         />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Select
+          <Combobox<TaskTag>
             label={t('task.tag')}
             value={form.tag}
-            onChange={(e) => set('tag', e.target.value as TaskTag)}
+            onChange={(v) => set('tag', v)}
             options={TAG_OPTIONS}
           />
-          <Select
+          <Combobox<Priority>
             label={t('task.priority')}
             value={form.priority}
-            onChange={(e) => set('priority', e.target.value as Priority)}
+            onChange={(v) => set('priority', v)}
             options={PRIORITY_OPTIONS}
           />
-          <Select
+          <Combobox<TaskStatus>
             label={t('task.status')}
             value={form.status}
-            onChange={(e) => set('status', e.target.value as TaskStatus)}
+            onChange={(v) => set('status', v)}
             options={STATUS_OPTIONS}
           />
         </div>
@@ -209,27 +215,25 @@ export function TaskFormDialog({
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
-            {t('task.assignees')}
-          </label>
-          <div className="grid grid-cols-1 gap-2 rounded-md border border-slate-200 p-3 sm:grid-cols-2 dark:border-slate-700">
+          <label className="text-sm font-medium text-secondary">{t('task.assignees')}</label>
+          <div className="border-subtle grid grid-cols-1 gap-1 rounded-lg border p-2 sm:grid-cols-2">
             {users?.map((user) => {
               const checked = form.assigneeIds.includes(user.id)
               return (
                 <label
                   key={user.id}
                   className={cn(
-                    'flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors',
+                    'flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-2 text-sm transition-colors duration-150',
                     checked
-                      ? 'bg-indigo-50 text-indigo-900 dark:bg-indigo-500/15 dark:text-indigo-200'
-                      : 'text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700/50',
+                      ? 'bg-brand-50 font-medium text-brand-700 dark:bg-brand-500/15 dark:text-brand-300'
+                      : 'text-secondary hover:bg-[var(--surface-muted)]',
                   )}
                 >
                   <input
                     type="checkbox"
                     checked={checked}
                     onChange={() => toggleAssignee(user.id)}
-                    className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                    className="border-subtle h-4 w-4 cursor-pointer rounded text-brand-600 focus:ring-brand-500"
                   />
                   <span>{user.name}</span>
                 </label>

@@ -37,18 +37,18 @@ export function ProfileMenu() {
           type="button"
           onClick={toggle}
           className={cn(
-            'flex h-9 items-center gap-2 rounded-full pr-3 pl-1 transition-colors',
-            'hover:bg-slate-100 dark:hover:bg-slate-700',
-            'focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none',
+            'flex h-10 cursor-pointer items-center gap-2 rounded-full pr-3 pl-1 transition-colors duration-150',
+            'hover:bg-[var(--surface-muted)]',
+            'focus-visible:outline-none focus-visible:ring-brand',
           )}
           aria-haspopup="menu"
           aria-expanded={isOpen}
         >
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-600 text-xs font-semibold text-white">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-600 text-xs font-semibold text-white">
             AD
           </span>
-          <span className="text-sm text-slate-700 dark:text-slate-200">Admin</span>
-          <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+          <span className="text-sm font-medium text-secondary">Admin</span>
+          <ChevronDown className="text-subtle h-3.5 w-3.5" />
         </button>
       }
     >
@@ -61,7 +61,7 @@ export function ProfileMenu() {
         >
           <Icon className="h-4 w-4" />
           <span className="flex-1">{t(labelKey)}</span>
-          {theme === value && <Check className="h-4 w-4 text-indigo-600" />}
+          {theme === value && <Check className="h-4 w-4 text-brand-600" />}
         </DropdownItem>
       ))}
 
@@ -75,7 +75,7 @@ export function ProfileMenu() {
           selected={language === value}
         >
           <span className="flex-1">{t(labelKey)}</span>
-          {language === value && <Check className="h-4 w-4 text-indigo-600" />}
+          {language === value && <Check className="h-4 w-4 text-brand-600" />}
         </DropdownItem>
       ))}
 

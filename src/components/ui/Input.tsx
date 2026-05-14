@@ -27,18 +27,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   const inputId = id ?? fallbackId
 
   return (
-    <div className={cn('flex flex-col gap-1', containerClassName)}>
+    <div className={cn('flex flex-col gap-1.5', containerClassName)}>
       {label && (
-        <label
-          htmlFor={inputId}
-          className="text-sm font-medium text-slate-700 dark:text-slate-200"
-        >
+        <label htmlFor={inputId} className="text-sm font-medium text-secondary">
           {label}
         </label>
       )}
       <div className="relative">
         {leadingIcon && (
-          <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-slate-400">
+          <span className="text-subtle pointer-events-none absolute top-1/2 left-3 -translate-y-1/2">
             {leadingIcon}
           </span>
         )}
@@ -48,26 +45,24 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           type={type}
           aria-invalid={error ? true : undefined}
           className={cn(
-            'h-9 w-full rounded-md border border-slate-300 bg-white text-sm text-slate-900',
-            'placeholder:text-slate-400',
-            'focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-0 focus:outline-none',
-            'disabled:cursor-not-allowed disabled:bg-slate-50',
-            'dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500',
-            'dark:disabled:bg-slate-900',
-            leadingIcon ? 'pl-9' : 'pl-3',
-            trailingIcon ? 'pr-9' : 'pr-3',
-            error && 'border-rose-400 focus:border-rose-500 focus:ring-rose-500',
+            'h-10 w-full rounded-lg border border-subtle bg-[var(--surface-base)] text-sm text-primary transition-shadow',
+            'placeholder:text-subtle',
+            'focus:border-brand-500 focus:outline-none',
+            'disabled:cursor-not-allowed disabled:opacity-60',
+            leadingIcon ? 'pl-10' : 'pl-3',
+            trailingIcon ? 'pr-10' : 'pr-3',
+            error && 'border-danger-500 focus:border-danger-500',
             className,
           )}
           {...rest}
         />
         {trailingIcon && (
-          <span className="absolute top-1/2 right-3 -translate-y-1/2 text-slate-400">
+          <span className="text-subtle absolute top-1/2 right-3 -translate-y-1/2">
             {trailingIcon}
           </span>
         )}
       </div>
-      {error && <span className="text-xs text-rose-600">{error}</span>}
+      {error && <span className="text-xs text-danger-600">{error}</span>}
     </div>
   )
 })

@@ -29,15 +29,15 @@ export class ErrorBoundary extends Component<Props, State> {
 
     return (
       <div className="flex min-h-[50vh] items-center justify-center p-6">
-        <div className="max-w-md rounded-lg border border-rose-200 bg-rose-50 p-6 text-center dark:border-rose-900 dark:bg-rose-950/40">
-          <h2 className="text-lg font-semibold text-rose-900 dark:text-rose-200">
+        <div className="max-w-md rounded-2xl border border-danger-200 bg-danger-50 p-8 text-center dark:border-danger-500/30 dark:bg-danger-500/10">
+          <h2 className="text-lg font-semibold text-danger-700 dark:text-danger-300">
             {i18n.t('errors.boundaryTitle')}
           </h2>
-          <p className="mt-2 text-sm text-rose-700 dark:text-rose-300">{error.message}</p>
+          <p className="mt-2 text-sm text-danger-700 dark:text-danger-200">{error.message}</p>
           <button
             type="button"
             onClick={this.reset}
-            className="mt-4 rounded-md bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700"
+            className="mt-5 cursor-pointer rounded-lg bg-danger-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-danger-700"
           >
             {i18n.t('errors.tryAgain')}
           </button>

@@ -38,9 +38,11 @@ Two-repo layout (not monorepo). Types are duplicated where needed; shared via co
 | Build | **Vite 8** | Fast HMR, native ESM |
 | Framework | **React 19 + TypeScript** | Required by spec |
 | Styling | **Tailwind CSS v4** (no UI library) | Spec said Tailwind only |
+| Font | **Inter** (via Google Fonts) | Modern SaaS dashboard standard |
 | Routing | **React Router v7** | Standard for SPA |
 | Server state | **TanStack Query v5** | Caching, mutations, devtools |
 | Mock API (dev) | **MSW v2** | Same code path as production fetch |
+| i18n | **i18next + react-i18next** | EN/TH support with browser language detection |
 | Icons | **lucide-react** | Lightweight, tree-shakeable |
 | Class merging | **clsx + tailwind-merge** (`cn()` helper) | Standard pattern |
 | Linting | ESLint 10 + typescript-eslint | Out of the box |
@@ -109,22 +111,27 @@ GET    /api/metrics?date=YYYY-MM-DD  → { date, points: MetricPoint[] }
 src/
 ├── app/                      # Providers, router (app-level wiring)
 ├── components/
-│   ├── ui/                   # Primitives — no domain knowledge (Button, Input, Dialog, ...)
-│   ├── shared/               # Composite, cross-feature, no domain knowledge
+│   ├── ui/                   # Primitives — no domain (Button, Input, Dialog, Dropdown, Combobox, ...)
+│   ├── shared/               # Composite, cross-feature, no domain
 │   │   └── layout/           #   AppLayout, Sidebar, Header
 │   └── features/             # Business slices — domain-aware
-│       └── <name>/
-│           ├── api/          #     Query/mutation hooks + raw API calls
-│           ├── components/   #     Feature-scoped components
-│           ├── hooks/        #     Feature-scoped hooks
-│           └── utils/
+│       ├── tasks/            #   Task board feature
+│       │   ├── api/          #     Query/mutation hooks + raw API calls
+│       │   ├── components/   #     Feature-scoped components
+│       │   ├── hooks/        #     Feature-scoped hooks
+│       │   └── utils/
+│       └── preferences/      #   Theme + language preferences
+│           ├── components/   #     ProfileMenu
+│           └── hooks/        #     useTheme, useLanguage
 ├── pages/                    # Route components (thin — compose features only)
-├── hooks/                    # Cross-feature shared hooks
-├── lib/                      # Framework-agnostic utilities
+├── hooks/                    # Cross-feature shared hooks (useDebounce, useDisclosure, useLocalStorage, useMediaQuery)
+├── lib/                      # Framework-agnostic utilities (cn, apiFetch)
 ├── config/                   # Validated env, runtime config
 ├── constants/                # Routes, query keys, enum metadata
 ├── types/                    # Shared TypeScript types
+├── i18n/                     # i18next config + locales/{en,th}.json
 ├── mocks/                    # MSW handlers + fixtures
+├── index.css                 # Tailwind import + design tokens (@theme + CSS vars)
 └── main.tsx
 ```
 
@@ -145,12 +152,13 @@ src/
 - **No enums, no parameter properties** (TS `erasableSyntaxOnly`).
 - **Pages stay thin** — orchestrate features, no business logic, no fetching.
 - **Features are self-contained** — UI + hooks + API calls live together.
-- **Shared things move up** — used by 2+ features → `hooks/`, `lib/`, `components/common/`.
+- **Shared things move up** — used by 2+ features → `hooks/`, `lib/`, `components/shared/`.
 - **Constants over magic strings** — routes in `constants/routes.ts`, query keys in `constants/query-keys.ts`.
 - **Hierarchical query keys** — `queryKeys.tasks.list(params)` so `invalidateQueries({ queryKey: queryKeys.tasks.all })` wipes everything related.
-- **Server state → TanStack Query. URL state → search params. UI state → local `useState`.** No Redux/Zustand unless absolutely needed.
-- **Forms** — `react-hook-form` + Zod when added (not yet installed).
+- **Server state → TanStack Query. URL state → search params. UI state → local `useState`. Persistent UI prefs → `useLocalStorage`.** No Redux/Zustand unless absolutely needed.
+- **Forms** — Native form + controlled inputs (no `react-hook-form` yet). Validate inline.
 - **Class names** — compose with `cn()` from `@/lib/utils`.
+- **All user-facing text** must go through `useTranslation()` from react-i18next. Keys live in `src/i18n/locales/{en,th}.json`.
 
 ### Naming
 
@@ -181,6 +189,67 @@ main → feat/<scope> → PR → merge commit → main
 
 ---
 
+## Design System
+
+Tokens defined in [src/index.css](src/index.css) using Tailwind v4 `@theme` directive + CSS custom properties. Light theme on `:root`, dark theme on `html.dark`.
+
+### Semantic tokens (use these, NOT raw Tailwind colors)
+
+| Token | Purpose | Utility class |
+|---|---|---|
+| `--surface-canvas` | Page background | `surface-canvas` |
+| `--surface-sunken` | Sunken panels (column wrappers) | `surface-sunken` |
+| `--surface-base` | Cards, dialogs, dropdowns | `surface-base` |
+| `--surface-raised` | (Reserved) tooltips, popovers | `surface-raised` |
+| `--surface-muted` | Filter bar, subtle blocks, hover bg | `bg-[var(--surface-muted)]` |
+| `--border-subtle` | Hairline borders | `border-subtle` |
+| `--border-default` | Stronger borders | `border-default` |
+| `--text-primary` | Headings, important text | `text-primary` |
+| `--text-secondary` | Body text | `text-secondary` |
+| `--text-muted` | Labels, meta | `text-muted` |
+| `--text-subtle` | Placeholders, disabled | `text-subtle` |
+| `--track` | Progress/slider tracks | `bg-track` |
+| `--ring-brand` | Focus glow | `ring-brand` |
+
+### Scale tokens (Tailwind v4 `@theme`)
+
+- `bg-brand-{50..900}`, `text-brand-*`, `border-brand-*`
+- `bg-success-*`, `bg-warning-*`, `bg-danger-*`, `bg-info-*`
+- `rounded-{sm,md,lg,xl,2xl}` (custom radii)
+- `shadow-{xs,sm,md,lg,xl}` (custom soft shadows)
+- `font-sans` (Inter)
+
+### Rules
+
+- **Never use raw `slate-*`, `indigo-*`, `rose-*` in components.** Use semantic tokens.
+- **Status colors** (status badges, priority indicators) live in `components/features/tasks/utils/tone.ts` — keep all tone mapping there.
+- **Glass effect** (`glass`, `glass-strong` utilities) is reserved for Sidebar and Header. Dialogs and Dropdowns use solid `surface-base`.
+- **Focus**: buttons/cards/dropdowns use `focus-visible:ring-brand`. Inputs use `focus:border-brand-500` only (no ring) — Inter's caret + border is enough.
+
+---
+
+## i18n
+
+- Library: `react-i18next` + `i18next-browser-languagedetector`
+- Supported languages: `en` (default), `th`
+- Detection order: `localStorage` → `navigator`
+- Storage key: `taskflow:language`
+- Locale files: `src/i18n/locales/{en,th}.json` — keep keys in **kebab grouping**: `nav.dashboard`, `task.errors.titleRequired`
+- Interpolation: `{{count}}`, `<strong>{{title}}</strong>` (with `dangerouslySetInnerHTML` when HTML is in the string)
+- Component access: `const { t } = useTranslation()` then `t('key')`
+- Class components: import `i18n` from `@/i18n` and call `i18n.t('key')` (used in `ErrorBoundary`)
+
+---
+
+## Theme
+
+- Hook: `useTheme()` from `@/components/features/preferences/hooks`
+- Values: `'light' | 'dark' | 'system'` (persisted to `taskflow:theme` in localStorage)
+- Applies `dark` class to `<html>` and listens to OS `prefers-color-scheme` changes when `system`
+- UI primitives MUST include `dark:` variants where colors are not already token-driven
+
+---
+
 ## Env
 
 Defined in `.env.example`. Loaded type-safely via `src/config/env.ts` (throws if missing).
@@ -190,6 +259,14 @@ Defined in `.env.example`. Loaded type-safely via `src/config/env.ts` (throws if
 | `VITE_API_BASE_URL` | `/api` | Prefix for `apiFetch` |
 | `VITE_ENABLE_MOCKS` | `true` (dev) | Toggle MSW worker |
 | `VITE_APP_NAME` | `TaskFlow` | Display name |
+
+### Persisted user prefs (localStorage)
+
+| Key | Purpose |
+|---|---|
+| `taskflow:sidebar-collapsed` | Sidebar collapse state |
+| `taskflow:theme` | `light` / `dark` / `system` |
+| `taskflow:language` | `en` / `th` |
 
 ---
 

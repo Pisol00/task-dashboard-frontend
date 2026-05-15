@@ -312,6 +312,32 @@ Any update through `setFilters({…})` strips the `navSearch` flag — touching 
 
 ---
 
+## Toast notifications
+
+`ToastProvider` is mounted at app root in `src/main.tsx`. Use the `useToast()` hook anywhere below it.
+
+```ts
+const toast = useToast()
+toast.success('Task created')
+toast.error('Failed to save')
+toast.warning('Heads up')
+toast.info('Just so you know')
+```
+
+Behavior:
+- Position: fixed top-right (portal → `document.body`, z-index 70).
+- Auto-dismiss after 4 s; close button always available.
+- Enter/exit animations defined in `index.css` (`toast-in` / `toast-out`); honors `prefers-reduced-motion`.
+- Variants use design tokens (`text-success-600`, `text-danger-600`, …).
+
+Where it's wired today:
+- `TaskFormDialog` → validation failures (incl. past due date on create).
+- `DashboardPage` → success/error feedback for create/update/delete mutations.
+
+When adding new mutations, prefer `try/await mutateAsync` and toast both branches — keep mutation hooks unaware of UI feedback.
+
+---
+
 ## How Agents Should Work in This Repo
 
 1. **Read this file first** every session — it's the source of truth for stack and conventions.

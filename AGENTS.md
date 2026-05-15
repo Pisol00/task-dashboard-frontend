@@ -257,8 +257,19 @@ Defined in `.env.example`. Loaded type-safely via `src/config/env.ts` (throws if
 | Var | Default | Use |
 |---|---|---|
 | `VITE_API_BASE_URL` | `/api` | Prefix for `apiFetch` |
-| `VITE_ENABLE_MOCKS` | `true` (dev) | Toggle MSW worker |
+| `VITE_ENABLE_MOCKS` | `false` | Set `true` to use MSW; otherwise hits real backend through Vite proxy |
+| `VITE_API_PROXY_TARGET` | `http://localhost:3000` | Vite dev server proxies `/api/*` to this host |
 | `VITE_APP_NAME` | `TaskFlow` | Display name |
+
+### Backend integration
+
+The dev server proxies `/api/*` → `task-dashboard-backend` (default `localhost:3000`).
+This keeps the FE same-origin in the browser, so the frontend `apiFetch` always
+talks to `/api/...` regardless of whether MSW is on or the real backend is on.
+
+To switch:
+- **Backend mode** (default): set `VITE_ENABLE_MOCKS=false`, run the backend (`docker compose up -d && npm run dev` in the sibling repo).
+- **Mock mode**: set `VITE_ENABLE_MOCKS=true` — MSW intercepts in the browser, no backend needed.
 
 ### Persisted user prefs (localStorage)
 

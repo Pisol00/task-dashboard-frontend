@@ -7,10 +7,9 @@ import { exportElementToPdf } from '../utils/exportPdf'
 type ExportPdfButtonProps = {
   targetRef: RefObject<HTMLElement | null>
   filename: string
-  title?: string
 }
 
-export function ExportPdfButton({ targetRef, filename, title }: ExportPdfButtonProps) {
+export function ExportPdfButton({ targetRef, filename }: ExportPdfButtonProps) {
   const { t } = useTranslation()
   const [busy, setBusy] = useState(false)
 
@@ -18,7 +17,7 @@ export function ExportPdfButton({ targetRef, filename, title }: ExportPdfButtonP
     if (!targetRef.current || busy) return
     setBusy(true)
     try {
-      await exportElementToPdf({ element: targetRef.current, filename, title })
+      await exportElementToPdf({ element: targetRef.current, filename })
     } catch (err) {
       console.error('[exportPdf] failed', err)
     } finally {

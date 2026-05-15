@@ -50,6 +50,10 @@ export function ChartPage() {
 
         {data && (
           <div className={`transition-opacity duration-200 ${isFetching ? 'opacity-60' : ''}`}>
+            <div className="mb-4 flex items-baseline justify-between gap-2">
+              <h3 className="text-lg font-semibold text-primary">{t('chart.title')}</h3>
+              <span className="text-sm text-muted">{date}</span>
+            </div>
             <DailyChart data={data} />
           </div>
         )}

@@ -1,6 +1,10 @@
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDailyMetrics } from '@/components/features/metrics/api'
-import { DailyChart } from '@/components/features/metrics/components'
+import {
+  DailyChart,
+  ExportPdfButton,
+} from '@/components/features/metrics/components'
 
 function today() {
   return new Date().toISOString().slice(0, 10)
@@ -10,6 +14,7 @@ export function ChartPage() {
   const { t } = useTranslation()
   const date = today()
   const { data, isLoading, isError } = useDailyMetrics(date)
+  const chartRef = useRef<HTMLDivElement>(null)
 
   return (
     <div className="space-y-6">
@@ -17,9 +22,19 @@ export function ChartPage() {
         <h2 className="text-2xl font-semibold tracking-tight text-primary">
           {t('chart.title')}
         </h2>
+        {data && (
+          <ExportPdfButton
+            targetRef={chartRef}
+            filename={`daily-graph-${date}.pdf`}
+            title={`${t('chart.title')} — ${date}`}
+          />
+        )}
       </div>
 
-      <div className="surface-base border-subtle rounded-2xl border p-6 shadow-xs">
+      <div
+        ref={chartRef}
+        className="surface-base border-subtle rounded-2xl border p-6 shadow-xs"
+      >
         {isLoading && (
           <div className="text-muted py-12 text-center">{t('chart.loading')}</div>
         )}

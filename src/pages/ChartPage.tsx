@@ -21,11 +21,7 @@ export function ChartPage() {
           {t('chart.title')}
         </h2>
         {data && (
-          <ExportPdfButton
-            targetRef={chartRef}
-            filename={`daily-graph-${date}.pdf`}
-            title={`${t('chart.title')} — ${date}`}
-          />
+          <ExportPdfButton targetRef={chartRef} filename={`daily-graph-${date}.pdf`} />
         )}
       </div>
 

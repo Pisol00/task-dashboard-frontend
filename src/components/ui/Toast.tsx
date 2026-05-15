@@ -26,7 +26,10 @@ type Toast = {
   description?: string
   variant: ToastVariant
   duration: number
+  exiting?: boolean
 }
+
+const EXIT_ANIMATION_MS = 200
 
 type ToastContextValue = {
   show: (options: ToastOptions) => string
@@ -60,12 +63,20 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const timers = useRef(new Map<string, ReturnType<typeof setTimeout>>())
 
   const dismiss = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id))
-    const handle = timers.current.get(id)
-    if (handle) {
-      clearTimeout(handle)
+    // Mark as exiting first to play out animation, then remove.
+    setToasts((prev) => prev.map((t) => (t.id === id ? { ...t, exiting: true } : t)))
+
+    const autoTimer = timers.current.get(id)
+    if (autoTimer) {
+      clearTimeout(autoTimer)
       timers.current.delete(id)
     }
+
+    const exitTimer = setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id))
+      timers.current.delete(`${id}:exit`)
+    }, EXIT_ANIMATION_MS)
+    timers.current.set(`${id}:exit`, exitTimer)
   }, [])
 
   const show = useCallback(
@@ -125,7 +136,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 <div
                   key={t.id}
                   role="status"
-                  className="surface-base border-subtle pointer-events-auto flex items-start gap-3 rounded-lg border p-3 shadow-lg"
+                  className={cn(
+                    'surface-base border-subtle pointer-events-auto flex items-start gap-3 rounded-lg border p-3 shadow-lg',
+                    t.exiting ? 'toast-exit' : 'toast-enter',
+                  )}
                 >
                   <Icon className={cn('mt-0.5 h-5 w-5 shrink-0', ACCENT[t.variant])} />
                   <div className="min-w-0 flex-1">

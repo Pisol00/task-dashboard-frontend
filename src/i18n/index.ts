@@ -7,7 +7,7 @@ import th from './locales/th.json'
 export const SUPPORTED_LANGUAGES = ['en', 'th'] as const
 export type Language = (typeof SUPPORTED_LANGUAGES)[number]
 
-export const LANGUAGE_STORAGE_KEY = 'taskflow:language'
+const LANGUAGE_STORAGE_KEY = 'taskflow:language'
 
 void i18n
   .use(LanguageDetector)

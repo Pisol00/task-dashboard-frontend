@@ -8,6 +8,8 @@ import { IconButton, Input } from '@/components/ui'
 import { ROUTES } from '@/constants'
 import { useDebounce } from '@/hooks'
 
+const NAV_SEARCH_FLAG = 'navSearch'
+
 export function Header() {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -17,8 +19,14 @@ export function Header() {
   const [value, setValue] = useState('')
   const debounced = useDebounce(value, 300)
 
+  // Sync input from URL only when the navSearch marker is present.
+  // When Dashboard filters change (no marker), Header input stays empty.
   useEffect(() => {
     if (location.pathname !== ROUTES.dashboard) {
+      setValue('')
+      return
+    }
+    if (searchParams.get(NAV_SEARCH_FLAG) !== '1') {
       setValue('')
       return
     }
@@ -30,35 +38,31 @@ export function Header() {
   }, [location.pathname, searchParams])
 
   useEffect(() => {
+    const trimmed = debounced.trim()
     const parsed = parseSearchQuery(debounced)
     const onDashboard = location.pathname === ROUTES.dashboard
 
-    if (!onDashboard) {
-      if (!debounced.trim()) return
-      const next = new URLSearchParams()
-      if (parsed.q) next.set('q', parsed.q)
-      if (parsed.priority) next.set('priority', parsed.priority)
-      if (parsed.status) next.set('status', parsed.status)
-      if (parsed.tag) next.set('tag', parsed.tag)
-      navigate({ pathname: ROUTES.dashboard, search: next.toString() })
+    // Empty input on Dashboard: if marker exists, fully reset (drops marker
+    // and any nav-owned filters). Outside Dashboard: nothing to do.
+    if (!trimmed) {
+      if (!onDashboard) return
+      if (searchParams.get(NAV_SEARCH_FLAG) !== '1') return
+      navigate({ pathname: ROUTES.dashboard }, { replace: true })
       return
     }
 
-    const next = new URLSearchParams(searchParams)
-    next.delete('q')
-    next.delete('priority')
-    next.delete('status')
-    next.delete('tag')
-    next.delete('page')
+    const next = new URLSearchParams()
+    next.set(NAV_SEARCH_FLAG, '1')
     if (parsed.q) next.set('q', parsed.q)
     if (parsed.priority) next.set('priority', parsed.priority)
     if (parsed.status) next.set('status', parsed.status)
     if (parsed.tag) next.set('tag', parsed.tag)
 
-    if (next.toString() === searchParams.toString()) return
+    if (onDashboard && next.toString() === searchParams.toString()) return
+
     navigate(
       { pathname: ROUTES.dashboard, search: next.toString() },
-      { replace: true },
+      onDashboard ? { replace: true } : undefined,
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounced])

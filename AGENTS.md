@@ -54,19 +54,19 @@ Two-repo layout (not monorepo). Types are duplicated where needed; shared via co
 - `erasableSyntaxOnly: true` → no parameter properties in classes, no enums; use union string literals instead
 - `noUnusedLocals` / `noUnusedParameters` → strict
 
-### Backend (planned)
+### Backend
 
 | Layer | Choice |
 |---|---|
-| Runtime | **Node.js (LTS)** |
-| Framework | **Express** |
-| ORM | **Prisma** |
-| Database | **PostgreSQL** (Docker for local dev) |
-| Validation | **Zod** (request schemas) |
-| Language | **TypeScript** |
-| Structure | Feature-modular (`src/modules/{tasks,users,metrics}` each with `routes/controller/service/schema`) |
+| Runtime | **Node.js 24** |
+| Framework | **Express 5** |
+| ORM | **Prisma 7** (with PrismaPg adapter) |
+| Database | **PostgreSQL 16** (Docker for local dev, port 5433) |
+| Validation | **Zod** |
+| Language | **TypeScript** (ESM) |
+| Structure | Feature-modular: `src/modules/{tasks,users,metrics}/*.{routes,controller,service,schema,mapper,types}.ts` |
 
-Backend lives in `task-dashboard-backend` (sibling repo). The Vite dev server proxies `/api/*` to it.
+Backend lives in `task-dashboard-backend` (sibling repo). The Vite dev server proxies `/api/*` to it (default `http://localhost:3000`).
 
 ---
 
@@ -77,7 +77,7 @@ Base path: `/api`
 ### Tasks
 
 ```
-GET    /api/tasks?q=&priority=&status=&page=&limit=
+GET    /api/tasks?q=&priority=&status=&tag=&page=&limit=
   → { data: Task[], page, limit, total, totalPages }
 
 GET    /api/tasks/:id        → Task
@@ -86,7 +86,11 @@ PATCH  /api/tasks/:id        → Task
 DELETE /api/tasks/:id        → 204
 ```
 
-Search behavior: `q` matches title case-insensitively. `priority` and `status` accept `"All"` to skip filtering. All filters AND-combined.
+Behavior:
+- `q` matches title case-insensitively
+- `priority`, `status`, `tag` accept `"All"` to skip filtering
+- All filters are AND-combined
+- Pagination is **per-status**: `limit` = items per status; response is up to `3 × limit`; `totalPages` = max across statuses
 
 ### Users
 
@@ -281,6 +285,30 @@ To run end-to-end:
 | `taskflow:sidebar-collapsed` | Sidebar collapse state |
 | `taskflow:theme` | `light` / `dark` / `system` |
 | `taskflow:language` | `en` / `th` |
+
+---
+
+## Search architecture
+
+Two search surfaces, kept visually separate via a URL marker:
+
+- **Header search** (global, top-right of Header) — auto-detects keywords (`high`, `bug`, `เสร็จ`, …) via `parseSearchQuery` and writes `?navSearch=1&q=…` or `&priority=…` etc. on the Dashboard route.
+- **Dashboard filter bar** — owns the same params (`q`, `priority`, `status`, `tag`, `page`).
+
+`useTaskFilters` is the source of truth. It splits two concepts:
+
+- `rawFilters` → fed to the query (drives the API call), reads URL as-is.
+- `filters` → fed to the filter bar UI; **returns empty values while `navSearch=1` is present** so the two inputs never visually sync.
+
+Any update through `setFilters({…})` strips the `navSearch` flag — touching the filter bar always supersedes a nav-search session.
+
+---
+
+## Performance
+
+- **Code-split chart route**: `ChartPage` is `React.lazy`-loaded in `src/app/router.tsx` so Recharts + jsPDF + html2canvas-pro live in a separate chunk loaded only when `/chart` is visited.
+- **`placeholderData: (prev) => prev`** on the tasks list query — pagination/filter switches don't blank the board.
+- **`isFetching` opacity** on Dashboard + Chart — smoother than a re-render flash.
 
 ---
 

@@ -149,6 +149,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Recharts: suppress default focus outline on chart SVG and tick labels */
+.recharts-wrapper,
+.recharts-wrapper svg,
+.recharts-surface,
+.recharts-cartesian-axis-tick {
+  outline: none;
+}
+
 /* ---------- Utility classes built on tokens ---------- */
 
 @utility surface-canvas {

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import {
   Button,
   Combobox,
+  DatePicker,
   Dialog,
   Input,
   Textarea,
@@ -196,13 +197,13 @@ export function TaskFormDialog({
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Input
-            label={t('task.dueDate')}
-            type="date"
-            value={form.dueDate}
-            onChange={(e) => set('dueDate', e.target.value)}
-            error={errors.dueDate}
-          />
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-secondary">{t('task.dueDate')}</label>
+            <DatePicker value={form.dueDate} onChange={(v) => set('dueDate', v)} />
+            {errors.dueDate && (
+              <span className="text-xs text-danger-600">{errors.dueDate}</span>
+            )}
+          </div>
           <Input
             label={t('task.progressLabel')}
             type="number"

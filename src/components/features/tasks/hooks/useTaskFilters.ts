@@ -35,7 +35,9 @@ function parsePage(value: string | null): number {
 export function useTaskFilters() {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const filters = useMemo(
+  const navSearchActive = searchParams.get('navSearch') === '1'
+
+  const rawFilters = useMemo(
     () => ({
       q: searchParams.get('q') ?? '',
       priority: parsePriority(searchParams.get('priority')),
@@ -44,6 +46,16 @@ export function useTaskFilters() {
       page: parsePage(searchParams.get('page')),
     }),
     [searchParams],
+  )
+
+  // Displayed filters: hide values from the Dashboard filter bar while
+  // a nav-search session is active so the two inputs don't visually sync.
+  const filters = useMemo(
+    () =>
+      navSearchActive
+        ? { q: '', priority: 'All' as const, status: 'All' as const, tag: 'All' as const, page: rawFilters.page }
+        : rawFilters,
+    [navSearchActive, rawFilters],
   )
 
   const setFilters = useCallback(
@@ -90,22 +102,25 @@ export function useTaskFilters() {
     setSearchParams(new URLSearchParams(), { replace: true })
   }, [setSearchParams])
 
+  // Query uses the raw URL values — so the board still filters correctly
+  // while a nav-search session is active.
   const query: TaskListQuery = useMemo(
     () => ({
-      q: filters.q || undefined,
-      priority: filters.priority,
-      status: filters.status,
-      tag: filters.tag,
-      page: filters.page,
+      q: rawFilters.q || undefined,
+      priority: rawFilters.priority,
+      status: rawFilters.status,
+      tag: rawFilters.tag,
+      page: rawFilters.page,
     }),
-    [filters],
+    [rawFilters],
   )
 
   const isActive =
-    Boolean(filters.q) ||
-    filters.priority !== 'All' ||
-    filters.status !== 'All' ||
-    filters.tag !== 'All'
+    !navSearchActive &&
+    (Boolean(filters.q) ||
+      filters.priority !== 'All' ||
+      filters.status !== 'All' ||
+      filters.tag !== 'All')
 
-  return { filters, query, setFilters, clear, isActive }
+  return { filters, query, setFilters, clear, isActive, navSearchActive }
 }

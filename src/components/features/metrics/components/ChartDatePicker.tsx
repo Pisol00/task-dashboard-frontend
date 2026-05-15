@@ -1,6 +1,6 @@
-import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Button, IconButton, Input } from '@/components/ui'
+import { Button, DatePicker, IconButton } from '@/components/ui'
 
 type ChartDatePickerProps = {
   date: string
@@ -27,14 +27,7 @@ export function ChartDatePicker({
         <ChevronLeft className="h-4 w-4" />
       </IconButton>
 
-      <Input
-        type="date"
-        value={date}
-        onChange={(e) => onChange(e.target.value)}
-        leadingIcon={<Calendar className="h-4 w-4" />}
-        aria-label={t('chart.selectDate')}
-        containerClassName="w-48"
-      />
+      <DatePicker value={date} onChange={onChange} className="w-48" />
 
       <IconButton label={t('chart.nextDay')} onClick={onNext}>
         <ChevronRight className="h-4 w-4" />

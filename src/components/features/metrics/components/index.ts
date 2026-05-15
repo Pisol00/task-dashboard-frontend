@@ -1,3 +1,4 @@
+export * from './ChartDatePicker'
 export * from './ChartLegend'
 export * from './ChartTooltip'
 export * from './DailyChart'

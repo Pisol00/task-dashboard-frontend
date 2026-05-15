@@ -102,6 +102,10 @@
     "green": "สีเขียว",
     "orange": "สีส้ม",
     "blue": "สีน้ำเงิน",
-    "exportPdf": "ส่งออก PDF"
+    "exportPdf": "ส่งออก PDF",
+    "previousDay": "วันก่อนหน้า",
+    "nextDay": "วันถัดไป",
+    "today": "วันนี้",
+    "selectDate": "เลือกวันที่"
   }
 }

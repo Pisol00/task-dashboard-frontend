@@ -2,18 +2,16 @@ import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDailyMetrics } from '@/components/features/metrics/api'
 import {
+  ChartDatePicker,
   DailyChart,
   ExportPdfButton,
 } from '@/components/features/metrics/components'
-
-function today() {
-  return new Date().toISOString().slice(0, 10)
-}
+import { useChartDate } from '@/components/features/metrics/hooks'
 
 export function ChartPage() {
   const { t } = useTranslation()
-  const date = today()
-  const { data, isLoading, isError } = useDailyMetrics(date)
+  const { date, setDate, goPrev, goNext, goToday, isToday } = useChartDate()
+  const { data, isLoading, isError, isFetching } = useDailyMetrics(date)
   const chartRef = useRef<HTMLDivElement>(null)
 
   return (
@@ -31,6 +29,15 @@ export function ChartPage() {
         )}
       </div>
 
+      <ChartDatePicker
+        date={date}
+        isToday={isToday}
+        onChange={setDate}
+        onPrev={goPrev}
+        onNext={goNext}
+        onToday={goToday}
+      />
+
       <div
         ref={chartRef}
         className="surface-base border-subtle rounded-2xl border p-6 shadow-xs"
@@ -45,7 +52,11 @@ export function ChartPage() {
           </div>
         )}
 
-        {data && <DailyChart data={data} />}
+        {data && (
+          <div className={`transition-opacity duration-200 ${isFetching ? 'opacity-60' : ''}`}>
+            <DailyChart data={data} />
+          </div>
+        )}
       </div>
     </div>
   )

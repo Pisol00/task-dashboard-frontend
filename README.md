@@ -166,12 +166,17 @@ Defined in [src/index.css](src/index.css):
 
 ## Screenshots
 
-> _Add screenshots/GIFs here before submission_
+### Task Board — Light
 
-- `docs/screenshots/board-light.png`
-- `docs/screenshots/board-dark.png`
-- `docs/screenshots/chart-light.png`
-- `docs/screenshots/profile-menu.png`
+![Task board in light mode](docs/screenshots/board-light.png)
+
+### Task Board — Dark
+
+![Task board in dark mode](docs/screenshots/board-dark.png)
+
+### Daily Graph
+
+![Daily graph with multi-axis line chart](docs/screenshots/chart.png)
 
 ---
 

@@ -1,4 +1,4 @@
-import { env } from '@/config/env'
+const API_BASE_URL = '/api'
 
 type RequestOptions = Omit<RequestInit, 'body'> & {
   body?: unknown
@@ -19,7 +19,7 @@ export class ApiError extends Error {
 export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { body, params, headers, ...rest } = options
 
-  const url = new URL(`${env.apiBaseUrl}${path}`, window.location.origin)
+  const url = new URL(`${API_BASE_URL}${path}`, window.location.origin)
   if (params) {
     for (const [key, value] of Object.entries(params)) {
       if (value !== undefined && value !== '') {

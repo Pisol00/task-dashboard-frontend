@@ -41,7 +41,6 @@ Two-repo layout (not monorepo). Types are duplicated where needed; shared via co
 | Font | **Inter** (via Google Fonts) | Modern SaaS dashboard standard |
 | Routing | **React Router v7** | Standard for SPA |
 | Server state | **TanStack Query v5** | Caching, mutations, devtools |
-| Mock API (dev) | **MSW v2** | Same code path as production fetch |
 | i18n | **i18next + react-i18next** | EN/TH support with browser language detection |
 | Icons | **lucide-react** | Lightweight, tree-shakeable |
 | Class merging | **clsx + tailwind-merge** (`cn()` helper) | Standard pattern |
@@ -65,7 +64,7 @@ Two-repo layout (not monorepo). Types are duplicated where needed; shared via co
 | Language | **TypeScript** |
 | Structure | Feature-modular (`src/modules/{tasks,users,metrics}` each with `routes/controller/service/schema`) |
 
-Backend will live in a separate repo. Until it exists, MSW handlers in this repo simulate the contract.
+Backend lives in `task-dashboard-backend` (sibling repo). The Vite dev server proxies `/api/*` to it.
 
 ---
 
@@ -126,11 +125,9 @@ src/
 ├── pages/                    # Route components (thin — compose features only)
 ├── hooks/                    # Cross-feature shared hooks (useDebounce, useDisclosure, useLocalStorage, useMediaQuery)
 ├── lib/                      # Framework-agnostic utilities (cn, apiFetch)
-├── config/                   # Validated env, runtime config
 ├── constants/                # Routes, query keys, enum metadata
 ├── types/                    # Shared TypeScript types
 ├── i18n/                     # i18next config + locales/{en,th}.json
-├── mocks/                    # MSW handlers + fixtures
 ├── index.css                 # Tailwind import + design tokens (@theme + CSS vars)
 └── main.tsx
 ```
@@ -252,24 +249,23 @@ Tokens defined in [src/index.css](src/index.css) using Tailwind v4 `@theme` dire
 
 ## Env
 
-Defined in `.env.example`. Loaded type-safely via `src/config/env.ts` (throws if missing).
+Defined in `.env.example`. Only the Vite dev server reads these — no runtime env in client code.
 
 | Var | Default | Use |
 |---|---|---|
-| `VITE_API_BASE_URL` | `/api` | Prefix for `apiFetch` |
-| `VITE_ENABLE_MOCKS` | `false` | Set `true` to use MSW; otherwise hits real backend through Vite proxy |
 | `VITE_API_PROXY_TARGET` | `http://localhost:3000` | Vite dev server proxies `/api/*` to this host |
-| `VITE_APP_NAME` | `TaskFlow` | Display name |
+
+The API base path `/api` is hardcoded in `src/lib/api-client.ts`.
 
 ### Backend integration
 
 The dev server proxies `/api/*` → `task-dashboard-backend` (default `localhost:3000`).
-This keeps the FE same-origin in the browser, so the frontend `apiFetch` always
-talks to `/api/...` regardless of whether MSW is on or the real backend is on.
+The frontend `apiFetch` always talks to `/api/...` — same-origin from the
+browser's perspective.
 
-To switch:
-- **Backend mode** (default): set `VITE_ENABLE_MOCKS=false`, run the backend (`docker compose up -d && npm run dev` in the sibling repo).
-- **Mock mode**: set `VITE_ENABLE_MOCKS=true` — MSW intercepts in the browser, no backend needed.
+To run end-to-end:
+1. Start the backend (`docker compose up -d && npm run dev` in the sibling repo).
+2. `npm run dev` here.
 
 ### Persisted user prefs (localStorage)
 

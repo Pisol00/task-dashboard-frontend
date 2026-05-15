@@ -8,7 +8,7 @@ Dashboard for tracking tasks with kanban board, filters, pagination, and a multi
 - **Styling**: Tailwind CSS v4
 - **Routing**: React Router v7
 - **Data**: TanStack Query
-- **Mocks**: MSW (Mock Service Worker)
+- **i18n**: i18next (EN/TH)
 - **Icons**: lucide-react
 
 ## Getting Started
@@ -30,11 +30,6 @@ npm run dev
 Vite proxies `/api/*` to the backend (default `http://localhost:3000`), so the
 frontend and backend share an origin from the browser's perspective.
 
-### Running with mocks only (no backend)
-
-Set `VITE_ENABLE_MOCKS=true` in `.env` — MSW will intercept `/api/*` in the
-browser. Useful for prototyping without the backend running.
-
 ### Scripts
 
 ```bash
@@ -50,10 +45,7 @@ Copy `.env.example` to `.env` and adjust values:
 
 | Variable | Default | Use |
 |---|---|---|
-| `VITE_API_BASE_URL` | `/api` | Path prefix for `apiFetch` |
-| `VITE_ENABLE_MOCKS` | `false` | Set `true` to use MSW instead of real backend |
 | `VITE_API_PROXY_TARGET` | `http://localhost:3000` | Where Vite proxies `/api/*` |
-| `VITE_APP_NAME` | `TaskFlow` | Display name in UI |
 
 ## Project Structure
 
@@ -73,10 +65,8 @@ src/
 ├── pages/                    # Route components (thin — compose features)
 ├── hooks/                    # Shared hooks (useDebounce, useDisclosure, ...)
 ├── lib/                      # Framework-agnostic utilities (api-client, cn)
-├── config/                   # Validated env, runtime configuration
 ├── constants/                # Query keys, route paths, enum metadata
 ├── types/                    # Shared TypeScript types
-├── mocks/                    # MSW handlers + fixtures
 ├── index.css                 # Tailwind entry + global styles
 └── main.tsx
 ```

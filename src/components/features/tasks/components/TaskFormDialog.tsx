@@ -7,6 +7,7 @@ import {
   Dialog,
   Input,
   Textarea,
+  useToast,
   type ComboboxOption,
 } from '@/components/ui'
 import { PRIORITIES, TASK_STATUSES, TASK_TAGS } from '@/constants'
@@ -79,6 +80,7 @@ export function TaskFormDialog({
   isSubmitting,
 }: TaskFormDialogProps) {
   const { t } = useTranslation()
+  const toast = useToast()
   const mode = task ? 'edit' : 'create'
   const [form, setForm] = useState<FormState>(() => (task ? fromTask(task) : emptyForm()))
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
@@ -109,14 +111,26 @@ export function TaskFormDialog({
     const next: Partial<Record<keyof FormState, string>> = {}
     if (!form.title.trim()) next.title = t('task.errors.titleRequired')
     if (form.progress < 0 || form.progress > 100) next.progress = t('task.errors.progressRange')
-    if (!form.dueDate) next.dueDate = t('task.errors.dueDateRequired')
+    if (!form.dueDate) {
+      next.dueDate = t('task.errors.dueDateRequired')
+    } else if (mode === 'create') {
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      const picked = new Date(`${form.dueDate}T00:00:00`)
+      if (picked.getTime() < today.getTime()) {
+        next.dueDate = t('task.errors.dueDatePast')
+      }
+    }
     setErrors(next)
     return Object.keys(next).length === 0
   }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!validate()) return
+    if (!validate()) {
+      toast.error(t('toast.validationFailed'))
+      return
+    }
 
     const assignees: Assignee[] =
       users?.filter((u) => form.assigneeIds.includes(u.id)) ?? []

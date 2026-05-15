@@ -16,7 +16,7 @@ import {
 import { useTaskFilters } from '@/components/features/tasks/hooks'
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog'
 import { Pagination } from '@/components/shared/Pagination'
-import { Button } from '@/components/ui'
+import { Button, useToast } from '@/components/ui'
 import { useDisclosure } from '@/hooks'
 import type { Task } from '@/types'
 
@@ -24,6 +24,7 @@ const PER_STATUS = 3
 
 export function DashboardPage() {
   const { t } = useTranslation()
+  const toast = useToast()
   const { filters, query, setFilters, clear, isActive } = useTaskFilters()
   const { data, isLoading, isError, isFetching } = useTasks({ ...query, limit: PER_STATUS })
 
@@ -69,19 +70,32 @@ export function DashboardPage() {
   }
 
   const handleSubmit = async (input: Parameters<typeof createMutation.mutateAsync>[0]) => {
-    if (formMode === 'edit' && selectedTask) {
-      await updateMutation.mutateAsync({ id: selectedTask.id, patch: input })
-    } else {
-      await createMutation.mutateAsync(input)
+    try {
+      if (formMode === 'edit' && selectedTask) {
+        await updateMutation.mutateAsync({ id: selectedTask.id, patch: input })
+        toast.success(t('toast.taskUpdated'))
+      } else {
+        await createMutation.mutateAsync(input)
+        toast.success(t('toast.taskCreated'))
+      }
+      formDialog.close()
+    } catch {
+      toast.error(
+        formMode === 'edit' ? t('toast.taskUpdateFailed') : t('toast.taskCreateFailed'),
+      )
     }
-    formDialog.close()
   }
 
   const handleConfirmDelete = async () => {
     if (!selectedTask) return
-    await deleteMutation.mutateAsync(selectedTask.id)
-    confirmDelete.close()
-    detailDialog.close()
+    try {
+      await deleteMutation.mutateAsync(selectedTask.id)
+      toast.success(t('toast.taskDeleted'))
+      confirmDelete.close()
+      detailDialog.close()
+    } catch {
+      toast.error(t('toast.taskDeleteFailed'))
+    }
   }
 
   const isSubmitting = createMutation.isPending || updateMutation.isPending

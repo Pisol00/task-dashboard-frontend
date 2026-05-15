@@ -77,7 +77,8 @@
     "errors": {
       "titleRequired": "กรุณากรอกชื่องาน",
       "progressRange": "ความคืบหน้าต้องอยู่ระหว่าง 0–100",
-      "dueDateRequired": "กรุณาเลือกกำหนดส่ง"
+      "dueDateRequired": "กรุณาเลือกกำหนดส่ง",
+      "dueDatePast": "กำหนดส่งต้องไม่เป็นวันที่ผ่านมาแล้ว"
     }
   },
   "dialogs": {
@@ -95,6 +96,15 @@
     "notFoundTitle": "ไม่พบหน้าที่ค้นหา",
     "notFoundDescription": "หน้านี้ไม่มีอยู่ในระบบ",
     "backToDashboard": "กลับสู่แดชบอร์ด"
+  },
+  "toast": {
+    "taskCreated": "สร้างงานเรียบร้อย",
+    "taskUpdated": "อัปเดตงานเรียบร้อย",
+    "taskDeleted": "ลบงานเรียบร้อย",
+    "taskCreateFailed": "สร้างงานไม่สำเร็จ",
+    "taskUpdateFailed": "อัปเดตงานไม่สำเร็จ",
+    "taskDeleteFailed": "ลบงานไม่สำเร็จ",
+    "validationFailed": "กรุณาแก้ไขข้อผิดพลาดแล้วลองอีกครั้ง"
   },
   "chart": {
     "title": "กราฟรายวัน",

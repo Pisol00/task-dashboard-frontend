@@ -77,7 +77,8 @@
     "errors": {
       "titleRequired": "Title is required",
       "progressRange": "Progress must be 0–100",
-      "dueDateRequired": "Due date is required"
+      "dueDateRequired": "Due date is required",
+      "dueDatePast": "Due date cannot be in the past"
     }
   },
   "dialogs": {
@@ -95,6 +96,15 @@
     "notFoundTitle": "Page not found",
     "notFoundDescription": "The page you are looking for doesn't exist.",
     "backToDashboard": "Back to Dashboard"
+  },
+  "toast": {
+    "taskCreated": "Task created",
+    "taskUpdated": "Task updated",
+    "taskDeleted": "Task deleted",
+    "taskCreateFailed": "Failed to create task",
+    "taskUpdateFailed": "Failed to update task",
+    "taskDeleteFailed": "Failed to delete task",
+    "validationFailed": "Please fix the errors and try again"
   },
   "chart": {
     "title": "Daily Graph",

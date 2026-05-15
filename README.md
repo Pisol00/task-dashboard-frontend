@@ -14,29 +14,46 @@ Dashboard for tracking tasks with kanban board, filters, pagination, and a multi
 ## Getting Started
 
 ```bash
-# Install
+# 1. Install deps
 npm install
 
-# Run dev server (with MSW mocks)
+# 2. Copy env
+cp .env.example .env
+
+# 3. Start the backend (in the sibling repo task-dashboard-backend)
+#    See its README for docker compose + db:migrate + db:seed + npm run dev
+
+# 4. Run the frontend dev server
 npm run dev
+```
 
-# Type check
-npm run typecheck
+Vite proxies `/api/*` to the backend (default `http://localhost:3000`), so the
+frontend and backend share an origin from the browser's perspective.
 
-# Lint & format
-npm run lint
-npm run format
+### Running with mocks only (no backend)
+
+Set `VITE_ENABLE_MOCKS=true` in `.env` — MSW will intercept `/api/*` in the
+browser. Useful for prototyping without the backend running.
+
+### Scripts
+
+```bash
+npm run dev         # Vite dev server with /api proxy
+npm run typecheck   # tsc -b
+npm run lint        # eslint
+npm run format      # prettier --write
 ```
 
 ## Environment
 
 Copy `.env.example` to `.env` and adjust values:
 
-| Variable | Description |
-|---|---|
-| `VITE_API_BASE_URL` | Base path for API calls (default `/api`) |
-| `VITE_ENABLE_MOCKS` | Set `true` to start MSW worker in browser |
-| `VITE_APP_NAME` | Display name in UI |
+| Variable | Default | Use |
+|---|---|---|
+| `VITE_API_BASE_URL` | `/api` | Path prefix for `apiFetch` |
+| `VITE_ENABLE_MOCKS` | `false` | Set `true` to use MSW instead of real backend |
+| `VITE_API_PROXY_TARGET` | `http://localhost:3000` | Where Vite proxies `/api/*` |
+| `VITE_APP_NAME` | `TaskFlow` | Display name in UI |
 
 ## Project Structure
 

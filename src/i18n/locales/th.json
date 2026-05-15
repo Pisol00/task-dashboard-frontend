@@ -27,7 +27,8 @@
   "header": {
     "notifications": "การแจ้งเตือน",
     "profile": "โปรไฟล์",
-    "logout": "ออกจากระบบ"
+    "logout": "ออกจากระบบ",
+    "searchPlaceholder": "ค้นหา ชื่องาน ความสำคัญ สถานะ ประเภท…"
   },
   "preferences": {
     "theme": "ธีม",

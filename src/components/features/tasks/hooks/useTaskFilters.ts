@@ -1,12 +1,13 @@
 import { useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router'
-import { PRIORITIES, TASK_STATUSES } from '@/constants'
-import type { Priority, TaskListQuery, TaskStatus } from '@/types'
+import { PRIORITIES, TASK_STATUSES, TASK_TAGS } from '@/constants'
+import type { Priority, TaskListQuery, TaskStatus, TaskTag } from '@/types'
 
 type FilterUpdate = {
   q?: string
   priority?: Priority | 'All'
   status?: TaskStatus | 'All'
+  tag?: TaskTag | 'All'
   page?: number
 }
 
@@ -17,6 +18,11 @@ function parsePriority(value: string | null): Priority | 'All' {
 
 function parseStatus(value: string | null): TaskStatus | 'All' {
   if (value && (TASK_STATUSES as string[]).includes(value)) return value as TaskStatus
+  return 'All'
+}
+
+function parseTag(value: string | null): TaskTag | 'All' {
+  if (value && (TASK_TAGS as string[]).includes(value)) return value as TaskTag
   return 'All'
 }
 
@@ -34,6 +40,7 @@ export function useTaskFilters() {
       q: searchParams.get('q') ?? '',
       priority: parsePriority(searchParams.get('priority')),
       status: parseStatus(searchParams.get('status')),
+      tag: parseTag(searchParams.get('tag')),
       page: parsePage(searchParams.get('page')),
     }),
     [searchParams],
@@ -51,6 +58,8 @@ export function useTaskFilters() {
             writes.push(['priority', update.priority === 'All' ? undefined : update.priority])
           if ('status' in update)
             writes.push(['status', update.status === 'All' ? undefined : update.status])
+          if ('tag' in update)
+            writes.push(['tag', update.tag === 'All' ? undefined : update.tag])
           if ('page' in update)
             writes.push(['page', update.page && update.page > 1 ? String(update.page) : undefined])
 
@@ -60,7 +69,7 @@ export function useTaskFilters() {
           }
 
           const touchedFilter =
-            'q' in update || 'priority' in update || 'status' in update
+            'q' in update || 'priority' in update || 'status' in update || 'tag' in update
           if (touchedFilter && options.resetPage !== false && !('page' in update)) {
             next.delete('page')
           }
@@ -82,13 +91,17 @@ export function useTaskFilters() {
       q: filters.q || undefined,
       priority: filters.priority,
       status: filters.status,
+      tag: filters.tag,
       page: filters.page,
     }),
     [filters],
   )
 
   const isActive =
-    Boolean(filters.q) || filters.priority !== 'All' || filters.status !== 'All'
+    Boolean(filters.q) ||
+    filters.priority !== 'All' ||
+    filters.status !== 'All' ||
+    filters.tag !== 'All'
 
   return { filters, query, setFilters, clear, isActive }
 }

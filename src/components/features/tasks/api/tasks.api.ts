@@ -10,6 +10,7 @@ export function fetchTasks(query: TaskListQuery) {
       q: query.q,
       priority: query.priority,
       status: query.status,
+      tag: query.tag,
       page: query.page,
       limit: query.limit,
     },

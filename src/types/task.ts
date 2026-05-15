@@ -26,6 +26,7 @@ export type TaskListQuery = {
   q?: string
   priority?: Priority | 'All'
   status?: TaskStatus | 'All'
+  tag?: TaskTag | 'All'
   page?: number
   limit?: number
 }

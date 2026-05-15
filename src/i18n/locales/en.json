@@ -27,7 +27,8 @@
   "header": {
     "notifications": "Notifications",
     "profile": "Profile",
-    "logout": "Log out"
+    "logout": "Log out",
+    "searchPlaceholder": "Search title, priority, status, tag…"
   },
   "preferences": {
     "theme": "Theme",

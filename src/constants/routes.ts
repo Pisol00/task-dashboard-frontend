@@ -5,5 +5,3 @@ export const ROUTES = {
   team: '/team',
   settings: '/settings',
 } as const
-
-export type RoutePath = (typeof ROUTES)[keyof typeof ROUTES]

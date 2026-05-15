@@ -25,7 +25,7 @@ type AvatarProps = {
   className?: string
 }
 
-export function Avatar({ user, size = 'md', className }: AvatarProps) {
+function Avatar({ user, size = 'md', className }: AvatarProps) {
   return (
     <span
       title={user.name}

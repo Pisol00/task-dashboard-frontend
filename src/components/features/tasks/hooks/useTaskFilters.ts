@@ -70,8 +70,12 @@ export function useTaskFilters() {
 
           const touchedFilter =
             'q' in update || 'priority' in update || 'status' in update || 'tag' in update
-          if (touchedFilter && options.resetPage !== false && !('page' in update)) {
-            next.delete('page')
+          if (touchedFilter) {
+            // Filter changes from Dashboard always supersede a nav-search session.
+            next.delete('navSearch')
+            if (options.resetPage !== false && !('page' in update)) {
+              next.delete('page')
+            }
           }
 
           return next

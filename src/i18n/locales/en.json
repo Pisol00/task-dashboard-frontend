@@ -102,6 +102,10 @@
     "green": "Green",
     "orange": "Orange",
     "blue": "Blue",
-    "exportPdf": "Export PDF"
+    "exportPdf": "Export PDF",
+    "previousDay": "Previous day",
+    "nextDay": "Next day",
+    "today": "Today",
+    "selectDate": "Select date"
   }
 }

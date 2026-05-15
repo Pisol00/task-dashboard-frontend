@@ -41,6 +41,8 @@ Two-repo layout (not monorepo). Types are duplicated where needed; shared via co
 | Font | **Inter** (via Google Fonts) | Modern SaaS dashboard standard |
 | Routing | **React Router v7** | Standard for SPA |
 | Server state | **TanStack Query v5** | Caching, mutations, devtools |
+| Charts | **Recharts** | Multi-axis line chart for Daily Graph |
+| PDF export | **jsPDF + html2canvas-pro** | html2canvas-pro supports CSS custom properties (Tailwind v4) |
 | i18n | **i18next + react-i18next** | EN/TH support with browser language detection |
 | Icons | **lucide-react** | Lightweight, tree-shakeable |
 | Class merging | **clsx + tailwind-merge** (`cn()` helper) | Standard pattern |
@@ -119,11 +121,16 @@ src/
 │       │   ├── components/   #     Feature-scoped components
 │       │   ├── hooks/        #     Feature-scoped hooks
 │       │   └── utils/
+│       ├── metrics/          #   Daily Graph feature
+│       │   ├── api/          #     useDailyMetrics
+│       │   ├── components/   #     DailyChart, ChartTooltip, ChartLegend, ChartDatePicker, ExportPdfButton
+│       │   ├── hooks/        #     useChartDate (URL-backed)
+│       │   └── utils/        #     series config, exportPdf helper
 │       └── preferences/      #   Theme + language preferences
 │           ├── components/   #     ProfileMenu
 │           └── hooks/        #     useTheme, useLanguage
 ├── pages/                    # Route components (thin — compose features only)
-├── hooks/                    # Cross-feature shared hooks (useDebounce, useDisclosure, useLocalStorage, useMediaQuery)
+├── hooks/                    # Cross-feature shared hooks (useDebounce, useDisclosure, useLocalStorage)
 ├── lib/                      # Framework-agnostic utilities (cn, apiFetch)
 ├── constants/                # Routes, query keys, enum metadata
 ├── types/                    # Shared TypeScript types

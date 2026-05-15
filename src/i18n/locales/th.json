@@ -94,5 +94,14 @@
     "notFoundTitle": "ไม่พบหน้าที่ค้นหา",
     "notFoundDescription": "หน้านี้ไม่มีอยู่ในระบบ",
     "backToDashboard": "กลับสู่แดชบอร์ด"
+  },
+  "chart": {
+    "title": "กราฟรายวัน",
+    "loading": "กำลังโหลดกราฟ…",
+    "loadFailed": "โหลดข้อมูลกราฟไม่สำเร็จ",
+    "green": "สีเขียว",
+    "orange": "สีส้ม",
+    "blue": "สีน้ำเงิน",
+    "exportPdf": "ส่งออก PDF"
   }
 }

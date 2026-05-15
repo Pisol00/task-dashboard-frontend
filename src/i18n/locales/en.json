@@ -94,5 +94,14 @@
     "notFoundTitle": "Page not found",
     "notFoundDescription": "The page you are looking for doesn't exist.",
     "backToDashboard": "Back to Dashboard"
+  },
+  "chart": {
+    "title": "Daily Graph",
+    "loading": "Loading chart…",
+    "loadFailed": "Failed to load chart data",
+    "green": "Green",
+    "orange": "Orange",
+    "blue": "Blue",
+    "exportPdf": "Export PDF"
   }
 }

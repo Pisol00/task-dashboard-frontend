@@ -2,7 +2,7 @@
 
 Task management dashboard with a kanban board and a daily multi-axis chart.
 
-Backend lives in a sibling repo: [`task-dashboard-backend`](../task-dashboard-backend).
+Backend lives in a sibling repo: [`task-dashboard-backend`](https://github.com/Pisol00/task-dashboard-backend).
 The Vite dev server proxies `/api/*` to it, so the browser sees one origin.
 
 ---
